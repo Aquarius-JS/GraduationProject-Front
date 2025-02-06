@@ -1,0 +1,20 @@
+{
+  "name": "graduationproject-front",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "react-imvc start --config=imvc.config.js",
+    "build": "react-imvc build",
+    "test": "react-imvc test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/runtime": "^7.26.7",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-imvc": "^3.4.5"
+  }
+}
