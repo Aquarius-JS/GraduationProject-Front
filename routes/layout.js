@@ -18,7 +18,6 @@ export default function Page(props) {
         <meta name="keywords" content={props.keywords} />
       </head>
       <body>
-        <img src={props.publicPath + '/img/react.png'} alt="" />
         <div id="root" dangerouslySetInnerHTML={{ __html: props.content }} />
         <div id="modal" />
         <Script>{`

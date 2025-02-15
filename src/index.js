@@ -1,6 +1,6 @@
 export default [
   {
-    path: '/',
-    controller: () => import('./home/Controller'),
+    path: '/student/home',
+    controller: () => import('./student/Controller'),
   },
 ];
