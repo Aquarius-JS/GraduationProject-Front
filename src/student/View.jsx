@@ -13,10 +13,8 @@ export default function View() {
       {/* <h1>Hello React-IMVC</h1> */}
       <button
         onClick={() => {
-          ctrl.history.push({
-            pathname: '/student/home',
-            search: '?a=query',
-          });
+          console.log(ctrl.location);
+          window.history.pushState({}, '', `/student/home?foo=${state.foo + 1}`);
         }}
       >
         click
@@ -31,7 +29,7 @@ export default function View() {
           +1
         </button>
       </div>
-      <Test></Test>
+      {/* <Test></Test> */}
     </div>
   );
 }
