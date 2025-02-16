@@ -17,7 +17,7 @@ export default function Page(props) {
         <meta name="description" content={props.description} />
         <meta name="keywords" content={props.keywords} />
       </head>
-      <body>
+      <body style={{ margin: '0px' }}>
         <div id="root" dangerouslySetInnerHTML={{ __html: props.content }} />
         <div id="modal" />
         <Script>{`

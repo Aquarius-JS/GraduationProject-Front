@@ -4,7 +4,7 @@ import Model from './Model';
 
 export default class Home extends Controller {
   // 继承它，编写你的控制器逻辑
-  SSR = true;
+  SSR = false;
   View = View;
   Model = Model;
 }
