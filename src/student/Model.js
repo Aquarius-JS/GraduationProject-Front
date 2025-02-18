@@ -1,23 +1,15 @@
 const initialState = {
-  foo: 0,
+  urlParams: {},
 };
 
-const ADD_FOO = state => {
+const UPDATE_URLPARAMS = (state, payload) => {
   return {
     ...state,
-    foo: state.foo + 1,
-  };
-};
-
-const UPDATE_FOO = (state, foo) => {
-  return {
-    ...state,
-    foo,
+    urlParams: payload,
   };
 };
 
 export default {
   initialState,
-  ADD_FOO,
-  UPDATE_FOO,
+  UPDATE_URLPARAMS,
 };
