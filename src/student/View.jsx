@@ -1,52 +1,50 @@
 import React from 'react';
-import { useCtrl, useModel, useModelActions, useModelState } from 'react-imvc/hook';
-import { Flex, Layout } from 'antd';
-const { Header, Footer, Sider, Content } = Layout;
+import { Layout } from 'antd';
+import Menu from './componments/Menu/index';
+const { Header, Sider, Content } = Layout;
+
 const layoutStyle = {
-  overflow: 'hidden',
-  width: '100%',
+  position: 'relative',
+  width: '100vw',
+  height: '100vh',
 };
 const headerStyle = {
-  textAlign: 'center',
-  color: '#fff',
   height: 64,
-  paddingInline: 48,
-  lineHeight: '64px',
+  width: '100%',
   backgroundColor: '#4096ff',
+  position: 'fixed',
+  zIndex: 999,
+  top: 0,
+  left: 0,
 };
 const contentStyle = {
-  textAlign: 'center',
-  minHeight: 120,
-  lineHeight: '120px',
-  color: '#fff',
-  backgroundColor: '#0958d9',
+  backgroundColor: '#fff',
   display: 'inline-block',
 };
 const siderStyle = {
-  textAlign: 'center',
-  lineHeight: '120px',
-  color: '#fff',
-  backgroundColor: '#1677ff',
-  width: 'auto',
+  height: 'calc(100vh - 64px)',
   display: 'inline-block',
-};
-const footerStyle = {
-  textAlign: 'center',
-  color: '#fff',
-  backgroundColor: '#4096ff',
+  overflowY: 'auto',
+  overflowX: 'hidden',
+  backgroundColor: '#fff',
+  scrollbarWidth: 'none',
 };
 
 export default function () {
   return (
     <Layout style={layoutStyle}>
       <Header style={headerStyle}>Header</Header>
-      <Layout>
-        <Sider width="25%" style={siderStyle}>
-          Sider
+      <Layout
+        style={{
+          position: 'fixed',
+          top: 64,
+        }}
+      >
+        <Sider style={siderStyle}>
+          <Menu></Menu>
         </Sider>
         <Content style={contentStyle}>Content</Content>
       </Layout>
-      <Footer style={footerStyle}>Footer</Footer>
     </Layout>
   );
 }
