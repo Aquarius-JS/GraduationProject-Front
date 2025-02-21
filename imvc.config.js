@@ -17,6 +17,7 @@ const config = {
   //     "path": "./publish/static"
   // }
   hot: true,
+  restapi: 'http://localhost:3000',
 };
 
 module.exports = config;
