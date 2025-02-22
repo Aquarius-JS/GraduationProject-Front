@@ -11,15 +11,11 @@ const Login = () => {
   const onFinish = async values => {
     console.log('Received values of form: ', values);
     // 模拟登录逻辑
-    if (values.username === 'zhanghaoran' && values.password === 'abcd1234!@#$') {
-      const res = await ctrl.fetch('/login', { method: 'POST', body: JSON.stringify(values) });
-      console.log(res);
-      message.success('登录成功！');
-      await sleep(1000);
-      ctrl.redirect('/student/home');
-    } else {
-      message.error('用户名或密码错误！');
-    }
+    const res = await ctrl.fetch('/login', { method: 'POST', body: JSON.stringify(values) });
+    console.log(res);
+    message.success('登录成功！');
+    await sleep(1000);
+    ctrl.redirect('/student/home');
   };
 
   return (
