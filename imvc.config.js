@@ -2,6 +2,7 @@ const path = require('path');
 
 const root = __dirname;
 const PORT = 8080;
+const ajaxBaseURL = `http://localhost:3000`;
 
 const config = {
   title: '校园车辆管理平台',
@@ -17,7 +18,7 @@ const config = {
   //     "path": "./publish/static"
   // }
   hot: true,
-  restapi: 'http://localhost:3000',
+  restapi: ajaxBaseURL,
 };
 
 module.exports = config;
