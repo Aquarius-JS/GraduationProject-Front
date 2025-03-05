@@ -1,13 +1,15 @@
 import React from 'react';
+import { useModelState } from 'react-imvc/hook';
 import { Layout } from 'antd';
-const { Header, Sider, Content } = Layout;
 import Menu from './componments/Menu/index';
 import VehicleList from './componments/VehicleList/index';
+import PersonalInfo from './componments/PersonalInfo/index';
+const { Header, Sider, Content } = Layout;
 
 const layoutStyle = {
-  position: 'relative',
   width: '100vw',
   height: '100vh',
+  position: 'relative',
 };
 const headerStyle = {
   height: 64,
@@ -24,7 +26,6 @@ const contentStyle = {
 };
 const siderStyle = {
   height: 'calc(100vh - 64px)',
-  display: 'inline-block',
   overflowY: 'auto',
   overflowX: 'hidden',
   backgroundColor: '#fff',
@@ -32,6 +33,9 @@ const siderStyle = {
 };
 
 export default function () {
+  const state = useModelState();
+  const { tap } = state.urlParams;
+
   return (
     <Layout style={layoutStyle}>
       <Header style={headerStyle}>Header</Header>
@@ -45,7 +49,10 @@ export default function () {
           <Menu></Menu>
         </Sider>
         <Content style={contentStyle}>
-          <VehicleList />
+          {tap === 'mycar' && <VehicleList />}
+          {tap === 'carregister' && <div>车辆注册</div>}
+          {tap === 'illegalinfo' && <div>违规信息</div>}
+          {tap === 'personalinfo' && <PersonalInfo />}
         </Content>
       </Layout>
     </Layout>

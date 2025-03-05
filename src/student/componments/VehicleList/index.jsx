@@ -13,11 +13,6 @@ export default function () {
       key: 'license_number',
     },
     {
-      title: '学号',
-      dataIndex: 'stu_number',
-      key: 'stu_number',
-    },
-    {
       title: '车辆类型',
       dataIndex: 'vehicle_type',
       key: 'vehicle_type',
@@ -29,11 +24,16 @@ export default function () {
       key: 'vehicle_status',
       render: text => (text === 1 ? '正常' : '异常'),
     },
+    {
+      title: '车辆照片',
+      dataIndex: 'vehicle_img',
+      key: 'vehicle_img',
+    }
   ];
 
   return (
     <div>
-      {/* <h1>校园车辆管理系统</h1> */}
+      {/* {vehicleInfo.length === 0 && message.info('暂无数据')} */}
       <Table dataSource={vehicleInfo} columns={columns} rowKey="id" />
     </div>
   );
