@@ -8,6 +8,10 @@ export default class Home extends Controller {
   SSR = false;
   View = View;
   Model = Model;
+  preload = {
+    personalInfo: '/student/styles/personalInfo.css',
+  };
+
   getInitialState = () => {
     return {
       urlParams: this.location.query,
