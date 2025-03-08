@@ -1,0 +1,51 @@
+.personal-info-card {
+  width: 600px;
+  margin: 50px auto;
+}
+.avatar-box {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+.avatar-img-box {
+  width: 100px;
+  height: 100px;
+  position: relative;
+}
+.avatar-img-box img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.avatar-upload-box {
+  width: 100px;
+  height: 100px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.avatar-upload-btn {
+  color: #fff;
+}
+.ant-descriptions-item-label span {
+  width: 250px;
+  padding-left: 180px;
+  text-align-last: justify;
+  display: inline-block;
+}
+.ant-descriptions-item-content {
+  text-align: left;
+  padding-left: 25px;
+  display: inline-block;
+}

@@ -11,14 +11,14 @@ const Login = () => {
   const onFinish = async values => {
     console.log('Received values of form: ', values);
     // 模拟登录逻辑
-    if (values.username === 'zhanghaoran' && values.password === 'abcd1234!@#$') {
-      const res = await ctrl.fetch('/login', { method: 'POST', body: JSON.stringify(values) });
-      console.log(res);
+    const res = await ctrl.fetch('/login', { method: 'POST', body: JSON.stringify(values) });
+    console.log(res);
+    if (res.isOk) {
       message.success('登录成功！');
       await sleep(1000);
       ctrl.redirect('/student/home');
     } else {
-      message.error('用户名或密码错误！');
+      message.error('账号或密码错误！');
     }
   };
 
@@ -29,8 +29,8 @@ const Login = () => {
         <div className="login-form">
           <h1 className="login-title">登录</h1>
           <Form name="login_form" onFinish={onFinish}>
-            <Form.Item name="username" rules={[{ required: true, message: '请输入用户名！' }]}>
-              <Input prefix={<UserOutlined />} Outlined placeholder="用户名" size="large" />
+            <Form.Item name="stuNumber" rules={[{ required: true, message: '请输入账号！' }]}>
+              <Input prefix={<UserOutlined />} Outlined placeholder="账号" size="large" />
             </Form.Item>
             <Form.Item name="password" rules={[{ required: true, message: '请输入密码！' }]}>
               <Input prefix={<LockOutlined />} type="password" placeholder="密码" size="large" />
