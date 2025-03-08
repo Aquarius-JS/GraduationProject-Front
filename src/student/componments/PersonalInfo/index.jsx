@@ -1,24 +1,33 @@
 import React, { useState } from 'react';
 import { Style } from 'react-imvc/component';
-import { useModelState } from 'react-imvc/hook';
+import { useModelActions, useModelState } from 'react-imvc/hook';
 import { Card, Descriptions, Upload, Button, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 
 export default function () {
   const state = useModelState();
+  const actions = useModelActions();
   const { userInfo } = state;
   const [hover, setHover] = useState(false);
 
   const defaultImg = 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png';
 
-  const handleChange = info => {
-    // TODO: 上传头像接口
-    if (info.file.status === 'done') {
-      setAvatar(info.file.response.url);
-      message.success(`${info.file.name} 文件上传成功`);
-    } else if (info.file.status === 'error') {
-      message.error(`${info.file.name} 文件上传失败`);
+  const customRequest = async options => {
+    const { file, action: url } = options;
+    if (file.type.indexOf('image') === -1) {
+      message.warning('请选择图片');
+      return;
     }
+    const xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+    xhr.open('POST', url, true);
+    xhr.onload = () => {
+      const result = JSON.parse(xhr.responseText);
+      actions.UPDATE_USERINFO({ ...userInfo, user_img: result.resUrl });
+      message.success('上传成功');
+    };
+    xhr.upload.onprogress = e => {};
+    xhr.send(file);
   };
 
   return (
@@ -33,8 +42,8 @@ export default function () {
                 <Upload
                   name="avatar"
                   showUploadList={false}
-                  action="/upload" // TODO:替换为实际的上传接口
-                  onChange={handleChange}
+                  action="http://localhost:3000/uploadStuAvatar"
+                  customRequest={customRequest}
                 >
                   <Button icon={<UploadOutlined />} type="link" className="avatar-upload-btn">
                     更换头像
