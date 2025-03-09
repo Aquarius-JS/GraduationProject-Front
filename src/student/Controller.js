@@ -27,4 +27,18 @@ export default class Home extends Controller {
     }
     this.store.actions.UPDATE_STATE(res);
   };
+
+  updateStuInfo = async newUserInfo => {
+    const res = await this.fetch('/updateStuInfo', {
+      method: 'POST',
+      body: JSON.stringify(newUserInfo),
+    });
+    if (res?.isLogin === false) {
+      message.warning('登录状态已失效，请重新登录！');
+      await sleep(1000);
+      this.redirect('/login');
+      return;
+    }
+    return res;
+  };
 }
