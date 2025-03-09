@@ -3,6 +3,7 @@ import { Style } from 'react-imvc/component';
 import { useCtrl, useModelActions, useModelState } from 'react-imvc/hook';
 import { Card, Descriptions, Upload, Button, message, Modal, Form, Input } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
+import defaultImg from '../../../../assert/defaultImg';
 
 export default function () {
   const ctrl = useCtrl();
@@ -14,8 +15,6 @@ export default function () {
   const [isPasswordModalVisible, setIsPasswordModalVisible] = useState(false);
   const [form] = Form.useForm();
   const [passwordForm] = Form.useForm();
-
-  const defaultImg = 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png';
 
   const customRequest = async options => {
     const { file, action: url } = options;
@@ -39,6 +38,7 @@ export default function () {
     setIsModalVisible(true);
     form.setFieldsValue(userInfo);
   };
+  
   const handleOk = () => {
     form.validateFields().then(async values => {
       const res = await ctrl.updateStuInfo(values);
