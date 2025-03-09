@@ -3,6 +3,7 @@ import { Style } from 'react-imvc/component';
 import { useCtrl, useModelActions, useModelState } from 'react-imvc/hook';
 import { Card, Descriptions, Upload, Button, message, Modal, Form, Input } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
+import uniEncrypt from '../../../share/uniEncrypt';
 import defaultImg from '../../../assert/defaultImg';
 
 export default function () {
@@ -59,11 +60,19 @@ export default function () {
   };
 
   const handlePasswordOk = () => {
-    passwordForm.validateFields().then(values => {
-      // 处理密码更新逻辑
-      console.log(values);
-      setIsPasswordModalVisible(false);
-      message.success('密码更新成功');
+    passwordForm.validateFields().then(async values => {
+      // 非对称加密处理后传给后端
+      const { oldPassword, newPassword } = values;
+      const res = await ctrl.editPassword({
+        oldHashPassword: uniEncrypt(oldPassword),
+        newHashPassword: uniEncrypt(newPassword),
+      });
+      if (res.isOk) {
+        setIsPasswordModalVisible(false);
+        message.success(res.message);
+      } else {
+        message.error(res.message);
+      }
     });
   };
 
@@ -130,21 +139,21 @@ export default function () {
       </Modal>
       <Modal title="修改密码" visible={isPasswordModalVisible} onOk={handlePasswordOk} onCancel={handlePasswordCancel}>
         <Form form={passwordForm} layout="vertical">
-          <Form.Item name="old_password" label="旧密码" rules={[{ required: true, message: '请输入旧密码' }]}>
+          <Form.Item name="oldPassword" label="旧密码" rules={[{ required: true, message: '请输入旧密码' }]}>
             <Input.Password />
           </Form.Item>
-          <Form.Item name="new_password" label="新密码" rules={[{ required: true, message: '请输入新密码' }]}>
+          <Form.Item name="newPassword" label="新密码" rules={[{ required: true, message: '请输入新密码' }]}>
             <Input.Password />
           </Form.Item>
           <Form.Item
-            name="confirm_password"
+            name="confirmPassword"
             label="确认新密码"
-            dependencies={['new_password']}
+            dependencies={['newPassword']}
             rules={[
               { required: true, message: '请确认新密码' },
               ({ getFieldValue }) => ({
                 validator(_, value) {
-                  if (!value || getFieldValue('new_password') === value) {
+                  if (!value || getFieldValue('newPassword') === value) {
                     return Promise.resolve();
                   }
                   return Promise.reject(new Error('两次输入的密码不一致'));

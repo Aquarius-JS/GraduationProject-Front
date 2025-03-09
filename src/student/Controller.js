@@ -41,4 +41,17 @@ export default class Home extends Controller {
     }
     return res;
   };
+  editPassword = async passwordInfo => {
+    const res = await this.fetch('/editPassword', {
+      method: 'POST',
+      body: JSON.stringify(passwordInfo),
+    });
+    if (res?.isLogin === false) {
+      message.warning('登录状态已失效，请重新登录！');
+      await sleep(1000);
+      this.redirect('/login');
+      return;
+    }
+    return res;
+  };
 }
