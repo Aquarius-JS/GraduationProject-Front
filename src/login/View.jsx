@@ -4,15 +4,13 @@ import { useCtrl } from 'react-imvc/hook';
 import sleep from '../share/sleep';
 import { Form, Input, Button, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import uniEncrypt from '../share/uniEncrypt';
 
 const Login = () => {
   const ctrl = useCtrl();
-  // 表单提交处理函数
   const onFinish = async values => {
-    console.log('Received values of form: ', values);
-    // 模拟登录逻辑
+    values.password = uniEncrypt(values.password);
     const res = await ctrl.fetch('/login', { method: 'POST', body: JSON.stringify(values) });
-    console.log(res);
     if (res.isOk) {
       message.success('登录成功！');
       await sleep(1000);

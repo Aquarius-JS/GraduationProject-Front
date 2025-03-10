@@ -49,6 +49,7 @@ export default function () {
           <Menu></Menu>
         </Sider>
         <Content style={contentStyle}>
+          {tap == undefined && <VehicleList />}
           {tap === 'mycar' && <VehicleList />}
           {tap === 'carregister' && <div>车辆注册</div>}
           {tap === 'illegalinfo' && <div>违规信息</div>}
