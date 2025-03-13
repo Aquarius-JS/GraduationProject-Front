@@ -10,6 +10,7 @@ export default class Home extends Controller {
   Model = Model;
   preload = {
     personalInfo: '/student/styles/personalInfo.css',
+    home: '/student/styles/home.css',
   };
 
   getInitialState = () => {
@@ -17,7 +18,7 @@ export default class Home extends Controller {
       urlParams: this.location.query,
     };
   };
-  // TODO: 获取学生信息
+
   componentDidFirstMount = async () => {
     const res = await this.fetch('/getStudentAndVehicleInfo', { method: 'POST' });
     if (res?.isLogin === false) {
