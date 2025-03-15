@@ -1,10 +1,8 @@
-import Controller from 'react-imvc/controller'; // 加载 react-imvc controller 控制器
+import AuthorizationController from './AuthorizationController'; // 加载授权控制器
 import View from './View';
 import Model from './Model';
-import { message } from 'antd';
-import sleep from '../share/sleep';
 
-export default class Home extends Controller {
+export default class Home extends AuthorizationController {
   SSR = false;
   View = View;
   Model = Model;
@@ -20,39 +18,31 @@ export default class Home extends Controller {
   };
 
   componentDidFirstMount = async () => {
-    const res = await this.fetch('/getStudentAndVehicleInfo', { method: 'POST' });
-    if (res?.isLogin === false) {
-      message.warning('登录状态已失效，请重新登录！');
-      await sleep(1000);
-      this.redirect('/login');
-    }
+    const res = await this.stuFetch('/getStudentAndVehicleInfo', { method: 'POST' });
     this.store.actions.UPDATE_STATE(res);
   };
 
   updateStuInfo = async newUserInfo => {
-    const res = await this.fetch('/updateStuInfo', {
+    const res = await this.stuFetch('/updateStuInfo', {
       method: 'POST',
       body: JSON.stringify(newUserInfo),
     });
-    if (res?.isLogin === false) {
-      message.warning('登录状态已失效，请重新登录！');
-      await sleep(1000);
-      this.redirect('/login');
-      return;
-    }
     return res;
   };
+
   editPassword = async passwordInfo => {
-    const res = await this.fetch('/editPassword', {
+    const res = await this.stuFetch('/editPassword', {
       method: 'POST',
       body: JSON.stringify(passwordInfo),
     });
-    if (res?.isLogin === false) {
-      message.warning('登录状态已失效，请重新登录！');
-      await sleep(1000);
-      this.redirect('/login');
-      return;
-    }
+    return res;
+  };
+
+  vehicleRegistration = async registionInfo => {
+    const res = await this.stuFetch('/vehicleRegistration', {
+      method: 'POST',
+      body: JSON.stringify(registionInfo),
+    });
     return res;
   };
 }
