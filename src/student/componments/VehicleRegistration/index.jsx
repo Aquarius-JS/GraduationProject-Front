@@ -1,141 +1,134 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Select, Upload, message, Card } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
-import { useModelActions, useModelState } from 'react-imvc/hook';
+import { Form, Input, Button, Select, Upload, message, List, Steps, Empty, Modal } from 'antd';
+import { UploadOutlined, PlusOutlined } from '@ant-design/icons';
+import { useCtrl, useModelActions, useModelState } from 'react-imvc/hook';
+import fileToBase64 from '../../../share/fileToBase64';
 
 const { Option } = Select;
+const { Step } = Steps;
 
-export default function () {
+export default function VehicleRegistration() {
+  const ctrl = useCtrl();
   const actions = useModelActions();
   const state = useModelState();
+  console.log(state);
   const { vehicleInfo } = state;
+  console.log(vehicleInfo);
   const [form] = Form.useForm();
-  const [fileList, setFileList] = useState({
-    studentCard: [],
-    vehicleAppearance: [],
-    licensePlate: [],
-  });
+  const [vehicles, setVehicles] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const handleSubmit = async values => {
+  const handleAddVehicle = async values => {
     try {
-      const newVehicle = {
+      const stuImg = await fileToBase64(values.stu_card_img.file.originFileObj);
+      const vehicleImg = await fileToBase64(values.vehicle_img.file.originFileObj);
+      const licenseImg = await fileToBase64(values.license_img.file.originFileObj);
+      const json = {
         ...values,
-        student_card_img: fileList.studentCard.length > 0 ? fileList.studentCard[0].url : null,
-        vehicle_appearance_img: fileList.vehicleAppearance.length > 0 ? fileList.vehicleAppearance[0].url : null,
-        license_plate_img: fileList.licensePlate.length > 0 ? fileList.licensePlate[0].url : null,
+        stu_card_img: stuImg,
+        vehicle_img: vehicleImg,
+        license_img: licenseImg,
       };
-      actions.ADD_VEHICLE(newVehicle);
-      message.success('车辆登记成功');
-      form.resetFields();
-      setFileList({
-        studentCard: [],
-        vehicleAppearance: [],
-        licensePlate: [],
-      });
+      const res = await ctrl.vehicleRegistration(json);
+      if (res.isOk) {
+        message.success(res.message);
+        setIsModalVisible(false);
+      } else {
+        message.error(res.message);
+      }
     } catch (error) {
       message.error('车辆登记失败');
     }
   };
 
-  const handleUploadChange = (info, type) => {
-    let newFileList = [...info.fileList];
-    newFileList = newFileList.slice(-1); // 只保留最新上传的文件
-    newFileList = newFileList.map(file => {
-      if (file.response) {
-        file.url = file.response.url;
-      }
-      return file;
-    });
-    setFileList(prevState => ({ ...prevState, [type]: newFileList }));
+  const showModal = () => {
+    setIsModalVisible(true);
   };
 
-  const beforeUpload = file => {
-    const isImage = file.type.startsWith('image/');
-    if (!isImage) {
-      message.error('只能上传图片文件!');
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const customRequest = async options => {
+    const fileBuffer = options.file;
+    console.log(fileBuffer instanceof File);
+    if (!fileBuffer) {
+      return reject(new Error('No file uploaded'));
     }
-    const isLt10M = file.size / 1024 / 1024 < 10;
-    if (!isLt10M) {
-      message.error('图片大小不能超过10MB!');
-    }
-    return isImage && isLt10M;
+    const dataUrl = await fileToBase64(fileBuffer);
+    console.log(dataUrl);
+    options.onSuccess();
+    return dataUrl;
   };
 
   return (
-    <Card title="车辆登记" style={{ width: 600, margin: '50px auto' }}>
-      <Form form={form} layout="vertical" onFinish={handleSubmit}>
-        <Form.Item name="license_number" label="车牌号" rules={[{ required: true, message: '请输入车牌号' }]}>
-          <Input />
-        </Form.Item>
-        <Form.Item name="vehicle_type" label="车辆类型" rules={[{ required: true, message: '请选择车辆类型' }]}>
-          <Select>
-            <Option value={1}>小轿车</Option>
-            <Option value={2}>电动车</Option>
-          </Select>
-        </Form.Item>
-        <Form.Item name="vehicle_status" label="车辆状态" rules={[{ required: true, message: '请选择车辆状态' }]}>
-          <Select>
-            <Option value={1}>正常</Option>
-            <Option value={2}>异常</Option>
-          </Select>
-        </Form.Item>
-        <Form.Item
-          name="student_card_img"
-          label="学生证照片"
-          valuePropName="fileList"
-          getValueFromEvent={e => (Array.isArray(e) ? e : e && e.fileList)}
-        >
-          <Upload
-            name="student_card_img"
-            listType="picture"
-            className="upload-list-inline"
-            action="/uploadStudentCardImage" // 替换为实际的上传接口
-            beforeUpload={beforeUpload}
-            onChange={info => handleUploadChange(info, 'studentCard')}
-          >
-            <Button icon={<UploadOutlined />}>上传学生证照片</Button>
-          </Upload>
-        </Form.Item>
-        <Form.Item
-          name="vehicle_appearance_img"
-          label="车辆外观照片"
-          valuePropName="fileList"
-          getValueFromEvent={e => (Array.isArray(e) ? e : e && e.fileList)}
-        >
-          <Upload
-            name="vehicle_appearance_img"
-            listType="picture"
-            className="upload-list-inline"
-            action="/uploadVehicleAppearanceImage" // 替换为实际的上传接口
-            beforeUpload={beforeUpload}
-            onChange={info => handleUploadChange(info, 'vehicleAppearance')}
-          >
-            <Button icon={<UploadOutlined />}>上传车辆外观照片</Button>
-          </Upload>
-        </Form.Item>
-        <Form.Item
-          name="license_plate_img"
-          label="车牌号照片"
-          valuePropName="fileList"
-          getValueFromEvent={e => (Array.isArray(e) ? e : e && e.fileList)}
-        >
-          <Upload
-            name="license_plate_img"
-            listType="picture"
-            className="upload-list-inline"
-            action="/uploadLicensePlateImage" // 替换为实际的上传接口
-            beforeUpload={beforeUpload}
-            onChange={info => handleUploadChange(info, 'licensePlate')}
-          >
-            <Button icon={<UploadOutlined />}>上传车牌号照片</Button>
-          </Upload>
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            登记车辆
-          </Button>
-        </Form.Item>
-      </Form>
-    </Card>
+    <div style={{ padding: '20px' }}>
+      <Button type="primary" icon={<PlusOutlined />} onClick={showModal}>
+        添加新车辆登记
+      </Button>
+      <Modal title="添加新车辆登记" visible={isModalVisible} onCancel={handleCancel} footer={null}>
+        <Form form={form} layout="vertical" onFinish={handleAddVehicle}>
+          <Form.Item name="license_number" label="车牌号" rules={[{ required: true, message: '请输入车牌号' }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="vehicle_type" label="车辆类型" rules={[{ required: true, message: '请选择车辆类型' }]}>
+            <Select>
+              <Option value={1}>电动车</Option>
+              <Option value={2}>摩托车</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item name="stu_card_img" label="学生证照片">
+            <Upload name="stu_card_img" listType="picture" customRequest={customRequest}>
+              <Button icon={<UploadOutlined />}>上传学生证照片</Button>
+            </Upload>
+          </Form.Item>
+          <Form.Item name="vehicle_img" label="车辆外观照片">
+            <Upload name="vehicle_img" listType="picture" customRequest={customRequest}>
+              <Button icon={<UploadOutlined />}>上传车辆外观照片</Button>
+            </Upload>
+          </Form.Item>
+          <Form.Item name="license_img" label="车牌号照片">
+            <Upload name="license_img" listType="picture" customRequest={customRequest}>
+              <Button icon={<UploadOutlined />}>上传车牌号照片</Button>
+            </Upload>
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              添加车辆
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
+      {/* {vehicleInfo?.length === 0 ? (
+        <Empty description="还未登记任何车辆，去登记吧" />
+      ) : (
+        <List
+          header={<div>已添加的车辆</div>}
+          bordered
+          dataSource={vehicleInfo}
+          renderItem={(item, index) => (
+            <List.Item>
+              <div style={{ flex: 1 }}>
+                {item.license_number} - {item.vehicle_type === 1 ? '电动车' : '摩托车'}
+                <Steps current={item.step} size="small" style={{ marginTop: 10 }}>
+                  <Step title="添加车辆" />
+                  <Step title="确认提交" />
+                </Steps>
+              </div>
+              {item.step === 0 && (
+                <Button type="primary" onClick={() => handleNextStep(index)}>
+                  下一步
+                </Button>
+              )}
+            </List.Item>
+          )}
+        />
+      )}
+      {vehicleInfo?.length > 0 && vehicleInfo?.every(vehicle => vehicle.step > 0) && (
+        <Button type="primary" onClick={handleSubmit} style={{ marginTop: 20 }}>
+          提交申请
+        </Button>
+      )} */}
+    </div>
   );
 }
