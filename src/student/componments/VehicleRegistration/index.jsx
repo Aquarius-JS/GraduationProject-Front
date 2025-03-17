@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Select, Upload, message, List, Steps, Empty, Modal } from 'antd';
+import { Form, Input, Button, Select, Upload, message, List, Steps, Empty, Modal, Card } from 'antd';
 import { UploadOutlined, PlusOutlined } from '@ant-design/icons';
 import { useCtrl, useModelActions, useModelState } from 'react-imvc/hook';
 import fileToBase64 from '../../../share/fileToBase64';
@@ -11,12 +11,10 @@ export default function VehicleRegistration() {
   const ctrl = useCtrl();
   const actions = useModelActions();
   const state = useModelState();
-  console.log(state);
   const { vehicleInfo } = state;
-  console.log(vehicleInfo);
   const [form] = Form.useForm();
-  const [vehicles, setVehicles] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const vehicleInfoInProcess = vehicleInfo?.filter(item => item.vehicle_status !== 5) ?? []; // 登记流程中的信息
 
   const handleAddVehicle = async values => {
     try {
@@ -32,6 +30,7 @@ export default function VehicleRegistration() {
       const res = await ctrl.vehicleRegistration(json);
       if (res.isOk) {
         message.success(res.message);
+        form.resetFields();
         setIsModalVisible(false);
       } else {
         message.error(res.message);
@@ -41,32 +40,41 @@ export default function VehicleRegistration() {
     }
   };
 
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-
   const customRequest = async options => {
-    const fileBuffer = options.file;
-    console.log(fileBuffer instanceof File);
-    if (!fileBuffer) {
-      return reject(new Error('No file uploaded'));
-    }
-    const dataUrl = await fileToBase64(fileBuffer);
-    console.log(dataUrl);
     options.onSuccess();
-    return dataUrl;
   };
 
   return (
     <div style={{ padding: '20px' }}>
-      <Button type="primary" icon={<PlusOutlined />} onClick={showModal}>
-        添加新车辆登记
-      </Button>
-      <Modal title="添加新车辆登记" visible={isModalVisible} onCancel={handleCancel} footer={null}>
+      {vehicleInfoInProcess.length > 0 ? (
+        <>
+          <Button type="primary" icon={<PlusOutlined />} onClick={() => setIsModalVisible(true)}>
+            添加新车辆登记
+          </Button>
+          <List
+            style={{ marginTop: 20 }}
+            bordered
+            dataSource={vehicleInfoInProcess}
+            renderItem={item => (
+              <List.Item>
+                <VehicleItem vehicle={item} />
+              </List.Item>
+            )}
+          />
+        </>
+      ) : (
+        <Empty
+          description={
+            <span>
+              还未登记任何车辆，去
+              <Button type="link" onClick={() => setIsModalVisible(true)}>
+                登记
+              </Button>
+            </span>
+          }
+        />
+      )}
+      <Modal title="添加新车辆登记" visible={isModalVisible} onCancel={() => setIsModalVisible(false)} footer={null}>
         <Form form={form} layout="vertical" onFinish={handleAddVehicle}>
           <Form.Item name="license_number" label="车牌号" rules={[{ required: true, message: '请输入车牌号' }]}>
             <Input />
@@ -77,17 +85,17 @@ export default function VehicleRegistration() {
               <Option value={2}>摩托车</Option>
             </Select>
           </Form.Item>
-          <Form.Item name="stu_card_img" label="学生证照片">
+          <Form.Item name="stu_card_img" label="学生证照片" rules={[{ required: true, message: '请上传学生证照片' }]}>
             <Upload name="stu_card_img" listType="picture" customRequest={customRequest}>
               <Button icon={<UploadOutlined />}>上传学生证照片</Button>
             </Upload>
           </Form.Item>
-          <Form.Item name="vehicle_img" label="车辆外观照片">
+          <Form.Item name="vehicle_img" label="车辆外观照片" rules={[{ required: true, message: '请上传车辆照片' }]}>
             <Upload name="vehicle_img" listType="picture" customRequest={customRequest}>
               <Button icon={<UploadOutlined />}>上传车辆外观照片</Button>
             </Upload>
           </Form.Item>
-          <Form.Item name="license_img" label="车牌号照片">
+          <Form.Item name="license_img" label="车牌号照片" rules={[{ required: true, message: '请上传车牌号照片' }]}>
             <Upload name="license_img" listType="picture" customRequest={customRequest}>
               <Button icon={<UploadOutlined />}>上传车牌号照片</Button>
             </Upload>
@@ -99,36 +107,23 @@ export default function VehicleRegistration() {
           </Form.Item>
         </Form>
       </Modal>
-      {/* {vehicleInfo?.length === 0 ? (
-        <Empty description="还未登记任何车辆，去登记吧" />
-      ) : (
-        <List
-          header={<div>已添加的车辆</div>}
-          bordered
-          dataSource={vehicleInfo}
-          renderItem={(item, index) => (
-            <List.Item>
-              <div style={{ flex: 1 }}>
-                {item.license_number} - {item.vehicle_type === 1 ? '电动车' : '摩托车'}
-                <Steps current={item.step} size="small" style={{ marginTop: 10 }}>
-                  <Step title="添加车辆" />
-                  <Step title="确认提交" />
-                </Steps>
-              </div>
-              {item.step === 0 && (
-                <Button type="primary" onClick={() => handleNextStep(index)}>
-                  下一步
-                </Button>
-              )}
-            </List.Item>
-          )}
-        />
-      )}
-      {vehicleInfo?.length > 0 && vehicleInfo?.every(vehicle => vehicle.step > 0) && (
-        <Button type="primary" onClick={handleSubmit} style={{ marginTop: 20 }}>
-          提交申请
-        </Button>
-      )} */}
     </div>
   );
 }
+
+const VehicleItem = ({ vehicle }) => (
+  <div style={{ marginBottom: 20 }}>
+    <h3>
+      {`${vehicle.vehicle_type === 1 ? '电动车' : '摩托车'} ${vehicle.license_number}`}
+      <span> {vehicle.filing_date}</span>
+      <span> {vehicle.stu_number}</span>
+    </h3>
+    <p>车辆状态: {vehicle.vehicle_status === 1 ? '已提交' : ''}</p>
+    <p>学生证照片:</p>
+    <img src={vehicle.stu_card_img} alt="学生证照片" style={{ width: 100, height: 100 }} />
+    <p>车辆外观照片:</p>
+    <img src={vehicle.vehicle_img} alt="车辆外观照片" style={{ width: 100, height: 100 }} />
+    <p>车牌号照片:</p>
+    <img src={vehicle.license_img} alt="车牌号照片" style={{ width: 100, height: 100 }} />
+  </div>
+);
