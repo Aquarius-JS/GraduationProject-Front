@@ -1,15 +1,14 @@
-import Controller from 'react-imvc/controller'; // 加载 react-imvc controller 控制器
+import AuthorizationController from './AuthorizationController'; // 加载授权控制器
 import View from './View';
 import Model from './Model';
-import { message } from 'antd';
-import sleep from '../share/sleep';
 
-export default class Home extends Controller {
+export default class Home extends AuthorizationController {
   SSR = false;
   View = View;
   Model = Model;
   preload = {
     personalInfo: '/student/styles/personalInfo.css',
+    home: '/student/styles/home.css',
   };
 
   getInitialState = () => {
@@ -17,14 +16,38 @@ export default class Home extends Controller {
       urlParams: this.location.query,
     };
   };
-  // TODO: 获取学生信息
+
   componentDidFirstMount = async () => {
-    const res = await this.fetch('/getStudentAndVehicleInfo', { method: 'POST' });
-    if (res?.isLogin === false) {
-      message.warning('登录状态已失效，请重新登录！');
-      await sleep(1000);
-      this.redirect('/login');
-    }
+    const res = await this.stuFetch('/getStudentAndVehicleInfo', { method: 'POST' });
     this.store.actions.UPDATE_STATE(res);
+  };
+
+  getVehicleInfoByStuToken = async () => {
+    const res = await this.stuFetch('/getVehicleInfoByStu', { method: 'POST' });
+    this.store.actions.UPDATE_STATE({ vehicleInfo: res });
+  };
+
+  updateStuInfo = async newUserInfo => {
+    const res = await this.stuFetch('/updateStuInfo', {
+      method: 'POST',
+      body: JSON.stringify(newUserInfo),
+    });
+    return res;
+  };
+
+  editPassword = async passwordInfo => {
+    const res = await this.stuFetch('/editPassword', {
+      method: 'POST',
+      body: JSON.stringify(passwordInfo),
+    });
+    return res;
+  };
+
+  vehicleRegistration = async registionInfo => {
+    const res = await this.stuFetch('/vehicleRegistration', {
+      method: 'POST',
+      body: JSON.stringify(registionInfo),
+    });
+    return res;
   };
 }

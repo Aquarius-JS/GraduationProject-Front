@@ -28,13 +28,14 @@ export default function () {
       title: '车辆照片',
       dataIndex: 'vehicle_img',
       key: 'vehicle_img',
-    }
+      render: dataUrl => <img src={dataUrl} />,
+    },
   ];
 
   return (
     <div>
       {/* {vehicleInfo.length === 0 && message.info('暂无数据')} */}
-      <Table dataSource={vehicleInfo} columns={columns} rowKey="id" />
+      <Table dataSource={vehicleInfo?.filter(item => item?.vehicle_status === 5)} columns={columns} rowKey="id" />
     </div>
   );
 }

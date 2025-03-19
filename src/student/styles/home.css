@@ -1,0 +1,37 @@
+.stu-layout {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+.stu-header {
+  height: 64px;
+  width: 100%;
+  background-color: #4096ff;
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  left: 0;
+}
+
+.stu-main {
+  position: fixed;
+  top: 64px;
+}
+
+.stu-sider {
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: #fff;
+  scrollbar-width: none;
+}
+
+.stu-content {
+  height: calc(100vh - 64px);
+  width: calc(100vw - 200px) !important;
+  background-color: #fff;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
