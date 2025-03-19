@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Select, Upload, message, List, Steps, Empty, Modal, Card } from 'antd';
-import { UploadOutlined, PlusOutlined } from '@ant-design/icons';
+import { UploadOutlined, PlusOutlined, LoadingOutlined } from '@ant-design/icons';
 import { useCtrl, useModelActions, useModelState } from 'react-imvc/hook';
 import fileToBase64 from '../../../share/fileToBase64';
 
@@ -169,16 +169,28 @@ const VehicleItem = ({ vehicle }) => {
             <img src={vehicle.license_img} alt="车牌号照片" style={{ width: 100, height: 100, objectFit: 'cover' }} />
           </div>
         </div>
+        {/* {vehicle.vehicle_status === 1 && (
+          <div style={{ marginLeft: 'auto', display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <Button type="primary" onClick={() => onSubmit(vehicle.id)}>
+              提交
+            </Button>
+            <Button danger onClick={() => onDelete(vehicle.id)}>
+              删除
+            </Button>
+          </div>
+        )} */}
       </div>
       <Steps
         current={vehicle.vehicle_status}
-        size="middle"
+        size="small"
         style={{ marginTop: 20 }}
-        // status={vehicle.vehicle_status === 3 ? 'error' : 'process'}
+        status="process"
+        type="default"
+        labelPlacement="vertical"
       >
+        {/* TODO: 流程信息完善 */}
         <Step title="信息提交" />
-        <Step title="待审核" />
-        <Step title="审核中" />
+        <Step title="审核信息" icon={<LoadingOutlined />} />
         <Step title="审核通过" />
         <Step title="成功" />
       </Steps>
