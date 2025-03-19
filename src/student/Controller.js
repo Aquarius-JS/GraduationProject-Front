@@ -22,6 +22,11 @@ export default class Home extends AuthorizationController {
     this.store.actions.UPDATE_STATE(res);
   };
 
+  getVehicleInfoByStuToken = async () => {
+    const res = await this.stuFetch('/getVehicleInfoByStu', { method: 'POST' });
+    this.store.actions.UPDATE_STATE({ vehicleInfo: res });
+  };
+
   updateStuInfo = async newUserInfo => {
     const res = await this.stuFetch('/updateStuInfo', {
       method: 'POST',

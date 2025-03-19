@@ -32,6 +32,7 @@ export default function VehicleRegistration() {
         message.success(res.message);
         form.resetFields();
         setIsModalVisible(false);
+        ctrl.getVehicleInfoByStuToken();
       } else {
         message.error(res.message);
       }
@@ -52,8 +53,8 @@ export default function VehicleRegistration() {
             添加新车辆登记
           </Button>
           <List
+            split={false}
             style={{ marginTop: 20 }}
-            bordered
             dataSource={vehicleInfoInProcess}
             renderItem={item => (
               <List.Item>
@@ -111,19 +112,76 @@ export default function VehicleRegistration() {
   );
 }
 
-const VehicleItem = ({ vehicle }) => (
-  <div style={{ marginBottom: 20 }}>
-    <h3>
-      {`${vehicle.vehicle_type === 1 ? '电动车' : '摩托车'} ${vehicle.license_number}`}
-      <span> {vehicle.filing_date}</span>
-      <span> {vehicle.stu_number}</span>
-    </h3>
-    <p>车辆状态: {vehicle.vehicle_status === 1 ? '已提交' : ''}</p>
-    <p>学生证照片:</p>
-    <img src={vehicle.stu_card_img} alt="学生证照片" style={{ width: 100, height: 100 }} />
-    <p>车辆外观照片:</p>
-    <img src={vehicle.vehicle_img} alt="车辆外观照片" style={{ width: 100, height: 100 }} />
-    <p>车牌号照片:</p>
-    <img src={vehicle.license_img} alt="车牌号照片" style={{ width: 100, height: 100 }} />
-  </div>
-);
+const VehicleItem = ({ vehicle }) => {
+  const statusMap = {
+    0: '未提交',
+    1: '已登记',
+    2: '审核流程中',
+    3: '审核未通过',
+    4: '审核通过',
+    5: '成功',
+  };
+
+  // 将 Unix 时间戳转换为年月日时分秒格式
+  const formatDate = unixTime => {
+    const date = new Date(unixTime * 1000); // 将秒转换为毫秒
+    return date.toLocaleString('zh-CN', { hour12: false }); // 使用本地时间格式
+  };
+
+  return (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        marginBottom: 20,
+        border: '1px solid #f0f0f0',
+        padding: 10,
+        borderRadius: 5,
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div style={{ flex: 1 }}>
+          <h3>
+            <span
+              style={{
+                color: vehicle.vehicle_type === 1 ? '#4CAF50' : '#2196F3', // 绿色字体或蓝色字体
+                fontWeight: 'bold',
+              }}
+            >
+              {vehicle.vehicle_type === 1 ? '电动车' : '摩托车'} {vehicle.license_number}
+            </span>
+          </h3>
+          <p>登记日期: {formatDate(vehicle.filing_date)}</p>
+          <p>学号: {vehicle.stu_number}</p>
+          <p>车辆状态: {statusMap[vehicle.vehicle_status]}</p>
+        </div>
+        <div style={{ display: 'flex', gap: 10 }}>
+          <div>
+            <p>学生证照片:</p>
+            <img src={vehicle.stu_card_img} alt="学生证照片" style={{ width: 100, height: 100, objectFit: 'cover' }} />
+          </div>
+          <div>
+            <p>车辆外观照片:</p>
+            <img src={vehicle.vehicle_img} alt="车辆外观照片" style={{ width: 100, height: 100, objectFit: 'cover' }} />
+          </div>
+          <div>
+            <p>车牌号照片:</p>
+            <img src={vehicle.license_img} alt="车牌号照片" style={{ width: 100, height: 100, objectFit: 'cover' }} />
+          </div>
+        </div>
+      </div>
+      <Steps
+        current={vehicle.vehicle_status}
+        size="middle"
+        style={{ marginTop: 20 }}
+        // status={vehicle.vehicle_status === 3 ? 'error' : 'process'}
+      >
+        <Step title="信息提交" />
+        <Step title="待审核" />
+        <Step title="审核中" />
+        <Step title="审核通过" />
+        <Step title="成功" />
+      </Steps>
+    </div>
+  );
+};
