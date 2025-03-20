@@ -18,8 +18,8 @@ export default function () {
       <Layout className="stu-layout">
         <Header className="stu-header">Header</Header>
         <Layout className="stu-main">
-          <Sider className="stu-sider">
-            <Menu></Menu>
+          <Sider className="stu-sider" width={150}>
+            <Menu />
           </Sider>
           <Content className="stu-content">
             {tap == undefined && <VehicleList />}

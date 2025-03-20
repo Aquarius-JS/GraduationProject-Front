@@ -36,14 +36,6 @@ export default function () {
     actions.UPDATE_URLPARAMS(params);
   };
   return (
-    <Menu
-      onClick={onClick}
-      style={{
-        width: 200,
-      }}
-      defaultSelectedKeys={modelState.urlParams.tap ?? 'mycar'}
-      mode="inline"
-      items={items}
-    />
+    <Menu onClick={onClick} defaultSelectedKeys={modelState.urlParams.tap ?? 'mycar'} mode="inline" items={items} />
   );
 }
