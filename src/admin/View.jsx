@@ -1,28 +1,27 @@
 import React from 'react';
-import { useModelState } from 'react-imvc/hook';
 import { Style } from 'react-imvc/component';
 import { Layout } from 'antd';
 import Menu from './componments/Menu/index';
+import RegisterInfo from './componments/RegisterInfo/index';
+import { useModelState } from 'react-imvc/hook';
+
 const { Header, Sider, Content } = Layout;
 
 export default function () {
   const state = useModelState();
-//   const { tap } = state.urlParams;
+  const { tap } = state.urlParams;
 
   return (
     <>
-      <Layout className="stu-layout">
-        <Header className="stu-header">Header</Header>
-        <Layout className="stu-main">
-          <Sider className="stu-sider">
-            {/* <Menu></Menu> */}
-          </Sider>
-          <Content className="stu-content">
-            {/* {tap == undefined && <VehicleList />}
-            {tap === 'mycar' && <VehicleList />}
-            {tap === 'carregister' && <VehicleRegistration />}
-            {tap === 'illegalinfo' && <div>违规信息</div>}
-            {tap === 'personalinfo' && <PersonalInfo />} */}
+      <Style name="admin" />
+      <Layout className="admin-layout">
+        <Header className="admin-header">
+          <Menu />
+        </Header>
+        <Layout className="admin-main">
+          <Content className="admin-content">
+            {tap == undefined && <RegisterInfo />}
+            {tap === 'register_info' && <RegisterInfo />}
           </Content>
         </Layout>
       </Layout>
