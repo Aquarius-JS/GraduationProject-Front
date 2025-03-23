@@ -29,9 +29,11 @@
 
 .admin-content {
   height: calc(100vh - 64px);
-  width: calc(100vw - 180px) !important;
+  width: 100vw !important;
   background-color: #fff;
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: none;
+  display: flex;
+  justify-content: center;
 }

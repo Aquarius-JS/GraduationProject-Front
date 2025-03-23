@@ -27,4 +27,17 @@ export default class Admin extends Controller {
     const res = await this.fetch('/admin/getRegisterInfo', { method: 'POST' });
     this.store.actions.UPDATE_REGISTERINFO(res ?? []);
   };
+
+  approveRegister = async registerId => {
+    const res = await this.fetch('/admin/approveRegister', { method: 'POST', body: JSON.stringify({ registerId }) });
+    return res;
+  };
+
+  rejectRegister = async (registerId, remark) => {
+    const res = await this.fetch('/admin/rejectRegister', {
+      method: 'POST',
+      body: JSON.stringify({ registerId, remark }),
+    });
+    return res;
+  };
 }

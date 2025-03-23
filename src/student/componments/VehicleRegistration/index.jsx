@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Select, Upload, message, List, Steps, Empty, Modal, Card } from 'antd';
-import { UploadOutlined, PlusOutlined, LoadingOutlined } from '@ant-design/icons';
+import { UploadOutlined, PlusOutlined } from '@ant-design/icons';
 import { useCtrl, useModelActions, useModelState } from 'react-imvc/hook';
 import fileToBase64 from '../../../share/fileToBase64';
+import RegisterStep from './RegisterStep';
 
 const { Option } = Select;
-const { Step } = Steps;
 
 export default function VehicleRegistration() {
   const ctrl = useCtrl();
@@ -14,7 +14,7 @@ export default function VehicleRegistration() {
   const { vehicleInfo } = state;
   const [form] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const vehicleInfoInProcess = vehicleInfo?.filter(item => item.vehicle_status !== 5) ?? []; // 登记流程中的信息
+  const vehicleInfoInProcess = vehicleInfo ?? []; // 登记流程中的信息
 
   const handleAddVehicle = async values => {
     try {
@@ -122,10 +122,9 @@ const VehicleItem = ({ vehicle }) => {
     5: '成功',
   };
 
-  // 将 Unix 时间戳转换为年月日时分秒格式
   const formatDate = unixTime => {
-    const date = new Date(unixTime * 1000); // 将秒转换为毫秒
-    return date.toLocaleString('zh-CN', { hour12: false }); // 使用本地时间格式
+    const date = new Date(unixTime * 1000);
+    return date.toLocaleString('zh-CN', { hour12: false });
   };
 
   return (
@@ -180,20 +179,7 @@ const VehicleItem = ({ vehicle }) => {
           </div>
         )} */}
       </div>
-      <Steps
-        current={vehicle.vehicle_status}
-        size="small"
-        style={{ marginTop: 20 }}
-        status="process"
-        type="default"
-        labelPlacement="vertical"
-      >
-        {/* TODO: 流程信息完善 */}
-        <Step title="信息提交" />
-        <Step title="审核信息" icon={<LoadingOutlined />} />
-        <Step title="审核通过" />
-        <Step title="成功" />
-      </Steps>
+      <RegisterStep status={vehicle.vehicle_status} />
     </div>
   );
 };
