@@ -50,4 +50,28 @@ export default class Home extends AuthorizationController {
     });
     return res;
   };
+
+  confirmEnterSchool = async registionInfo => {
+    const res = await this.stuFetch('/confirmEnterSchool', {
+      method: 'POST',
+      body: JSON.stringify(registionInfo),
+    });
+    return res;
+  };
+
+  cancelRegister = async registionInfo => {
+    const res = await this.stuFetch('/cancelRegister', {
+      method: 'POST',
+      body: JSON.stringify(registionInfo),
+    });
+    return res;
+  };
+
+  registerAgain = async registionInfo => {
+    const res = await this.stuFetch('/registerAgain', {
+      method: 'POST',
+      body: JSON.stringify(registionInfo),
+    });
+    return res;
+  };
 }

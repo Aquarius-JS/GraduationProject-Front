@@ -1,10 +1,13 @@
 import React from 'react';
-import { Steps } from 'antd';
+import { message, Steps } from 'antd';
 import { StopOutlined, LoadingOutlined } from '@ant-design/icons';
+import { useCtrl } from 'react-imvc/hook';
 
 const { Step } = Steps;
 
-export default function ({ status }) {
+export default function ({ status, vehicle }) {
+  const ctrl = useCtrl();
+
   // 获取当前进行中的状态所对应的进度条序号
   const getStepStatus = status => {
     const statusObj = {
@@ -48,7 +51,30 @@ export default function ({ status }) {
       {status === 2 && (
         <>
           <Step title="审核通过" />
-          <Step title="领取标识" icon={<LoadingOutlined />} />
+          <Step
+            title="领取标识"
+            icon={<LoadingOutlined />}
+            description={
+              <span
+                style={{
+                  color: 'rgb(22, 119, 255)',
+                  cursor: 'pointer',
+                  textDecoration: 'underline rgb(22, 119, 255)',
+                }}
+                onClick={async () => {
+                  const res = await ctrl.confirmEnterSchool({ registerId: vehicle.id });
+                  if (res.isOk) {
+                    message.success(res.message);
+                  } else {
+                    message.warning(res.message);
+                  }
+                  ctrl.getVehicleInfoByStuToken();
+                }}
+              >
+                确认进校
+              </span>
+            }
+          />
           <Step title="车辆进校" />
         </>
       )}
@@ -63,7 +89,45 @@ export default function ({ status }) {
 
       {status === 4 && <Step title="已离校" status="finish" />}
 
-      {status === 5 && <Step title="审核未通过" status="error" />}
+      {status === 5 && (
+        <Step
+          title="审核未通过"
+          status="error"
+          style={{ width: 300 }}
+          description={
+            <>
+              <span
+                style={{ cursor: 'pointer', color: 'rgb(22, 119, 255)', textDecoration: 'underline rgb(22, 119, 255)' }}
+                onClick={async () => {
+                  const res = await ctrl.registerAgain({ registerId: vehicle.id });
+                  if (res.isOk) {
+                    message.success(res.message);
+                  } else {
+                    message.warning(res.message);
+                  }
+                  ctrl.getVehicleInfoByStuToken();
+                }}
+              >
+                完善信息
+              </span>
+              <span
+                style={{ cursor: 'pointer', color: 'gray', textDecoration: 'underline gray' }}
+                onClick={async () => {
+                  const res = await ctrl.cancelRegister({ registerId: vehicle.id });
+                  if (res.isOk) {
+                    message.success(res.message);
+                  } else {
+                    message.warning(res.message);
+                  }
+                  ctrl.getVehicleInfoByStuToken();
+                }}
+              >
+                取消登记
+              </span>
+            </>
+          }
+        />
+      )}
       {status === 6 && <Step title="取消登记" icon={<StopOutlined style={{ color: 'gray' }} />} />}
     </Steps>
   );

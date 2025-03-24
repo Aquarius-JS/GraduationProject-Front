@@ -136,6 +136,7 @@ const VehicleItem = ({ vehicle }) => {
         border: '1px solid #f0f0f0',
         padding: 10,
         borderRadius: 5,
+        width: 800,
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -179,7 +180,7 @@ const VehicleItem = ({ vehicle }) => {
           </div>
         )} */}
       </div>
-      <RegisterStep status={vehicle.vehicle_status} />
+      <RegisterStep status={vehicle.vehicle_status} vehicle={vehicle} />
     </div>
   );
 };
