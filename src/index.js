@@ -7,4 +7,8 @@ export default [
     path: '/student/home',
     controller: () => import('./student/Controller'),
   },
+  {
+    path: '/admin',
+    controller: () => import('./admin/Controller'),
+  },
 ];

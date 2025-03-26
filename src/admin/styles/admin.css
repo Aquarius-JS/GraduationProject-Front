@@ -1,10 +1,10 @@
-.stu-layout {
+.admin-layout {
   width: 100vw;
   height: 100vh;
   position: relative;
 }
 
-.stu-header {
+.admin-header {
   height: 64px;
   width: 100%;
   background-color: #4096ff;
@@ -14,12 +14,12 @@
   left: 0;
 }
 
-.stu-main {
+.admin-main {
   position: fixed;
   top: 64px;
 }
 
-.stu-sider {
+.admin-sider {
   height: calc(100vh - 64px);
   overflow-y: auto;
   overflow-x: hidden;
@@ -27,11 +27,13 @@
   scrollbar-width: none;
 }
 
-.stu-content {
+.admin-content {
   height: calc(100vh - 64px);
-  width: calc(100vw - 150px) !important;
+  width: 100vw !important;
   background-color: #fff;
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: none;
+  display: flex;
+  justify-content: center;
 }

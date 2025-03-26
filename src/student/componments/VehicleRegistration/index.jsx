@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Select, Upload, message, List, Steps, Empty, Modal, Card } from 'antd';
-import { UploadOutlined, PlusOutlined, LoadingOutlined } from '@ant-design/icons';
+import { UploadOutlined, PlusOutlined } from '@ant-design/icons';
 import { useCtrl, useModelActions, useModelState } from 'react-imvc/hook';
 import fileToBase64 from '../../../share/fileToBase64';
+import VehicleItem from './VehicleItem';
 
 const { Option } = Select;
-const { Step } = Steps;
 
 export default function VehicleRegistration() {
   const ctrl = useCtrl();
@@ -14,7 +14,7 @@ export default function VehicleRegistration() {
   const { vehicleInfo } = state;
   const [form] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const vehicleInfoInProcess = vehicleInfo?.filter(item => item.vehicle_status !== 5) ?? []; // 登记流程中的信息
+  const vehicleInfoInProcess = vehicleInfo ?? []; // 登记流程中的信息
 
   const handleAddVehicle = async values => {
     try {
@@ -111,89 +111,3 @@ export default function VehicleRegistration() {
     </div>
   );
 }
-
-const VehicleItem = ({ vehicle }) => {
-  const statusMap = {
-    0: '未提交',
-    1: '已登记',
-    2: '审核流程中',
-    3: '审核未通过',
-    4: '审核通过',
-    5: '成功',
-  };
-
-  // 将 Unix 时间戳转换为年月日时分秒格式
-  const formatDate = unixTime => {
-    const date = new Date(unixTime * 1000); // 将秒转换为毫秒
-    return date.toLocaleString('zh-CN', { hour12: false }); // 使用本地时间格式
-  };
-
-  return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        marginBottom: 20,
-        border: '1px solid #f0f0f0',
-        padding: 10,
-        borderRadius: 5,
-      }}
-    >
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <div style={{ flex: 1 }}>
-          <h3>
-            <span
-              style={{
-                color: vehicle.vehicle_type === 1 ? '#4CAF50' : '#2196F3', // 绿色字体或蓝色字体
-                fontWeight: 'bold',
-              }}
-            >
-              {vehicle.vehicle_type === 1 ? '电动车' : '摩托车'} {vehicle.license_number}
-            </span>
-          </h3>
-          <p>登记日期: {formatDate(vehicle.filing_date)}</p>
-          <p>学号: {vehicle.stu_number}</p>
-          <p>车辆状态: {statusMap[vehicle.vehicle_status]}</p>
-        </div>
-        <div style={{ display: 'flex', gap: 10 }}>
-          <div>
-            <p>学生证照片:</p>
-            <img src={vehicle.stu_card_img} alt="学生证照片" style={{ width: 100, height: 100, objectFit: 'cover' }} />
-          </div>
-          <div>
-            <p>车辆外观照片:</p>
-            <img src={vehicle.vehicle_img} alt="车辆外观照片" style={{ width: 100, height: 100, objectFit: 'cover' }} />
-          </div>
-          <div>
-            <p>车牌号照片:</p>
-            <img src={vehicle.license_img} alt="车牌号照片" style={{ width: 100, height: 100, objectFit: 'cover' }} />
-          </div>
-        </div>
-        {/* {vehicle.vehicle_status === 1 && (
-          <div style={{ marginLeft: 'auto', display: 'flex', flexDirection: 'column', gap: 10 }}>
-            <Button type="primary" onClick={() => onSubmit(vehicle.id)}>
-              提交
-            </Button>
-            <Button danger onClick={() => onDelete(vehicle.id)}>
-              删除
-            </Button>
-          </div>
-        )} */}
-      </div>
-      <Steps
-        current={vehicle.vehicle_status}
-        size="small"
-        style={{ marginTop: 20 }}
-        status="process"
-        type="default"
-        labelPlacement="vertical"
-      >
-        {/* TODO: 流程信息完善 */}
-        <Step title="信息提交" />
-        <Step title="审核信息" icon={<LoadingOutlined />} />
-        <Step title="审核通过" />
-        <Step title="成功" />
-      </Steps>
-    </div>
-  );
-};
