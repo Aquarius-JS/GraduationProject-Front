@@ -82,4 +82,12 @@ export default class Home extends AuthorizationController {
     });
     return res;
   };
+
+  modificationRegisterInfo = async newRegisterInfo => {
+    const res = await this.stuFetch('/modificationRegisterInfo', {
+      method: 'POST',
+      body: JSON.stringify(newRegisterInfo),
+    });
+    return res;
+  };
 }
