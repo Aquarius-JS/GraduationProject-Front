@@ -74,4 +74,12 @@ export default class Home extends AuthorizationController {
     });
     return res;
   };
+
+  leavingRegister = async registionInfo => {
+    const res = await this.stuFetch('/leavingRegister', {
+      method: 'POST',
+      body: JSON.stringify(registionInfo),
+    });
+    return res;
+  };
 }

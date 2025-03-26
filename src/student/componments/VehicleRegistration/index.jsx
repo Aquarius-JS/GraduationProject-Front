@@ -158,15 +158,15 @@ const VehicleItem = ({ vehicle }) => {
         <div style={{ display: 'flex', gap: 10 }}>
           <div>
             <p>学生证照片:</p>
-            <img src={vehicle.stu_card_img} alt="学生证照片" style={{ width: 100, height: 100, objectFit: 'cover' }} />
+            <img src={vehicle.stu_card_img} alt="学生证照片" style={{ height: 100, objectFit: 'cover' }} />
           </div>
           <div>
             <p>车辆外观照片:</p>
-            <img src={vehicle.vehicle_img} alt="车辆外观照片" style={{ width: 100, height: 100, objectFit: 'cover' }} />
+            <img src={vehicle.vehicle_img} alt="车辆外观照片" style={{ height: 100, objectFit: 'cover' }} />
           </div>
           <div>
             <p>车牌号照片:</p>
-            <img src={vehicle.license_img} alt="车牌号照片" style={{ width: 100, height: 100, objectFit: 'cover' }} />
+            <img src={vehicle.license_img} alt="车牌号照片" style={{ height: 100, objectFit: 'cover' }} />
           </div>
         </div>
         {/* {vehicle.vehicle_status === 1 && (
