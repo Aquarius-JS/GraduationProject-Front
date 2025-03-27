@@ -8,6 +8,7 @@ export default class Admin extends Controller {
   Model = Model;
   preload = {
     admin: './admin/styles/admin.css',
+    editor: './admin/styles/editor.css',
   };
 
   getInitialState = () => {
@@ -17,10 +18,7 @@ export default class Admin extends Controller {
   };
 
   componentDidFirstMount = () => {
-    const tap = this.store.getState().urlParams.tap;
-    if (tap === 'register_info' || tap == undefined) {
-      this.getRegisterInfo();
-    }
+    this.getRegisterInfo();
   };
 
   getRegisterInfo = async () => {
