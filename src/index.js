@@ -11,4 +11,8 @@ export default [
     path: '/admin',
     controller: () => import('./admin/Controller'),
   },
+  {
+    path: '/announcement/exhibition',
+    controller: () => import('./announcement/Controller'),
+  },
 ];
