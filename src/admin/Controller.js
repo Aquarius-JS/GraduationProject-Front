@@ -46,4 +46,11 @@ export default class Admin extends Controller {
     this.store.actions.UPDATE_ANNOUNCEMENTBASICINFO(res ?? []);
     return res;
   };
+
+  addAnnouncementInfo = async () => {
+    const res = await this.fetch('/addAnnouncementInfo', {
+      method: 'POST',
+    });
+    return res;
+  };
 }

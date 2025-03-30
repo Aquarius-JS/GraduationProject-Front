@@ -9,12 +9,13 @@ export default class Admin extends Controller {
 
   preload = {
     announcement: './announcement/styles/announcement.css',
+    editor: './announcementEditor/styles/editor.css',
   };
 
   getInitialState = () => {
     return {
       urlParams: this.location.query,
-      announcementId: this.location.query.announcementId ?? '',
+      announcementId: this.location.query.id ?? '',
     };
   };
 
@@ -27,8 +28,16 @@ export default class Admin extends Controller {
       method: 'POST',
       body: JSON.stringify({ announcementId }),
     });
-    this.store.actions.UPDATE_ANNOUNCEMENTINFO(res ?? []);
+    this.store.actions.UPDATE_ANNOUNCEMENTINFO(res);
     document.title = '公告: ' + res.title;
+    return res;
+  };
+
+  updateAnnouncementContentById = async (announcementId, content) => {
+    const res = await this.fetch('/updateAnnouncementContentById', {
+      method: 'POST',
+      body: JSON.stringify({ announcementId, content }),
+    });
     return res;
   };
 }

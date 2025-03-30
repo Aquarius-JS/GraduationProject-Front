@@ -17,8 +17,12 @@ export default function () {
     console.log(res);
   }, []);
 
-  const handleAdd = () => {
-    window.open('/announcement/editor?id=');
+  const handleAdd = async () => {
+    const res = await ctrl.addAnnouncementInfo();
+    console.log(res)
+    if (res.isOk) {
+      window.open(`/announcement/editor?id=${res.data.id}`);
+    }
   };
 
   const handleEdit = record => {

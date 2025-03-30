@@ -26,9 +26,20 @@ const UPDATE_ANNOUNCEMENTINFO = (state, payload) => {
   };
 };
 
+const UPDATE_ANNOUNCEMENTCONTENT = (state, payload) => {
+  return {
+    ...state,
+    announcementInfo: {
+      ...state.announcementInfo,
+      content: payload,
+    },
+  };
+};
+
 export default {
   initialState,
   UPDATE_STATE,
   UPDATE_URLPARAMS,
   UPDATE_ANNOUNCEMENTINFO,
+  UPDATE_ANNOUNCEMENTCONTENT,
 };

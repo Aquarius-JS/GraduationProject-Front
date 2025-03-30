@@ -1,18 +1,16 @@
-import React, { lazy, useState, useEffect, Suspense } from 'react';
+import React, { lazy, useState, useEffect, Suspense, useRef } from 'react';
 import { Style } from 'react-imvc/component';
+import { useCtrl, useModelState, useModelActions } from 'react-imvc/hook';
+import DT from '../../../share/debounce&throttle';
 const Editor = lazy(() => import('@wangeditor/editor-for-react').then(module => ({ default: module.Editor })));
 const Toolbar = lazy(() => import('@wangeditor/editor-for-react').then(module => ({ default: module.Toolbar })));
 
-function MyEditor() {
+export default function MyEditor({ announcementInfo }) {
+  const ctrl = useCtrl();
+  const state = useModelState();
+  const actions = useModelActions();
   const [editor, setEditor] = useState(null);
-
-  // 编辑器内容
-  const [html, setHtml] = useState();
-
-  // 工具栏配置
   const toolbarConfig = {};
-
-  // 编辑器配置
   const editorConfig = {
     placeholder: '请输入内容...',
     MENU_CONF: {
@@ -58,11 +56,15 @@ function MyEditor() {
     };
   }, [editor]);
 
+  const updateCallBack = DT.debounce((id, content) => {
+    ctrl.updateAnnouncementContentById(id, content);
+  });
+
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <>
       <Style name="editor" />
       <div>
-        <div style={{ border: '1px solid #ccc', width: 800, height: 600, zIndex: 1000 }}>
+        <div style={{ border: '1px solid #ccc', width: 810, height: 700, zIndex: 1000 }}>
           <Toolbar
             editor={editor}
             defaultConfig={toolbarConfig}
@@ -71,29 +73,17 @@ function MyEditor() {
           />
           <Editor
             defaultConfig={editorConfig}
-            value={html}
+            value={announcementInfo?.content}
             onCreated={setEditor}
-            onChange={editor => setHtml(editor.getHtml())}
+            onChange={editor => {
+              updateCallBack(state.announcementId, editor.getHtml());
+              actions.UPDATE_ANNOUNCEMENTCONTENT(editor.getHtml());
+            }}
             mode="default"
             style={{ height: '500px', overflowY: 'hidden' }}
           />
         </div>
-        <hr />
-        预览效果:
-        <div
-          style={{
-            marginTop: '15px',
-            border: '1px solid #ccc',
-            width: 800,
-            height: 600,
-            zIndex: 1000,
-            wordWrap: 'break-word',
-          }}
-          dangerouslySetInnerHTML={{ __html: html }}
-        ></div>
       </div>
-    </Suspense>
+    </>
   );
 }
-
-export default MyEditor;
