@@ -29,7 +29,15 @@ export default class Admin extends Controller {
       body: JSON.stringify({ announcementId }),
     });
     this.store.actions.UPDATE_ANNOUNCEMENTINFO(res);
-    document.title = '公告: ' + res.title;
+    document.title = '编辑公告: ' + res.title;
+    return res;
+  };
+
+  updateAnnouncementTitleById = async (announcementId, title) => {
+    const res = await this.fetch('/updateAnnouncementTitleById', {
+      method: 'POST',
+      body: JSON.stringify({ announcementId, title }),
+    });
     return res;
   };
 

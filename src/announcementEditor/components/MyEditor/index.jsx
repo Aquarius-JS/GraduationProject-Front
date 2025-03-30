@@ -64,7 +64,8 @@ export default function MyEditor({ announcementInfo }) {
     <>
       <Style name="editor" />
       <div>
-        <div style={{ border: '1px solid #ccc', width: 810, height: 700, zIndex: 1000 }}>
+        <div style={{ border: '1px solid #ccc', width: 846, height: 50 }}>标题</div>
+        <div style={{ border: '1px solid #ccc', width: 846, zIndex: 1000 }}>
           <Toolbar
             editor={editor}
             defaultConfig={toolbarConfig}
@@ -80,7 +81,7 @@ export default function MyEditor({ announcementInfo }) {
               actions.UPDATE_ANNOUNCEMENTCONTENT(editor.getHtml());
             }}
             mode="default"
-            style={{ height: '500px', overflowY: 'hidden' }}
+            style={{ height: '600px', overflowY: 'hidden' }}
           />
         </div>
       </div>
