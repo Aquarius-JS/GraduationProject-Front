@@ -2,10 +2,10 @@ import React from 'react';
 import { useModelState } from 'react-imvc/hook';
 import { Style } from 'react-imvc/component';
 import { Layout } from 'antd';
-import Menu from './componments/Menu/index';
-import VehicleList from './componments/VehicleList/index';
-import VehicleRegistration from './componments/VehicleRegistration';
-import PersonalInfo from './componments/PersonalInfo/index';
+import Menu from './components/Menu/index';
+import VehicleList from './components/VehicleList/index';
+import VehicleRegistration from './components/VehicleRegistration';
+import PersonalInfo from './components/PersonalInfo/index';
 const { Header, Sider, Content } = Layout;
 
 export default function () {

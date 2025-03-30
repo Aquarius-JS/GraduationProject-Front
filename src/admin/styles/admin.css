@@ -9,7 +9,7 @@
   width: 100%;
   background-color: #4096ff;
   position: fixed;
-  z-index: 999;
+  z-index: 0;
   top: 0;
   left: 0;
 }

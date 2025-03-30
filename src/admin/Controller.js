@@ -38,4 +38,12 @@ export default class Admin extends Controller {
     });
     return res;
   };
+
+  getAnnouncementBasicInfo = async () => {
+    const res = await this.fetch('/getAnnouncementBasicInfo', {
+      method: 'POST',
+    });
+    this.store.actions.UPDATE_ANNOUNCEMENTBASICINFO(res ?? []);
+    return res;
+  };
 }

@@ -1,0 +1,23 @@
+.announcement-container {
+  display: flex;
+  justify-content: center;
+}
+
+.announcement-info {
+  width: 810px;
+  margin: 10px 0;
+  overflow-wrap: break-word;
+}
+
+.announcement-info table {
+  border-collapse: collapse;
+}
+
+.announcement-info tr {
+  border: 0.8px solid black;
+}
+
+.announcement-info td {
+  border: 0.8px solid black;
+  padding: 4px 7px;
+}

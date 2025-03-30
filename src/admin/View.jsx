@@ -2,9 +2,9 @@ import React from 'react';
 import { Style } from 'react-imvc/component';
 import { useModelState } from 'react-imvc/hook';
 import { Layout } from 'antd';
-import Menu from './componments/Menu/index';
-import RegisterInfo from './componments/RegisterInfo/index';
-import Announcement from './componments/Announcement';
+import Menu from './components/Menu/index';
+import RegisterInfo from './components/RegisterInfo/index';
+import Announcement from './components/Announcement';
 
 const { Header, Sider, Content } = Layout;
 

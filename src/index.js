@@ -15,4 +15,8 @@ export default [
     path: '/announcement/exhibition',
     controller: () => import('./announcement/Controller'),
   },
+  {
+    path: '/announcement/editor',
+    controller: () => import('./announcementEditor/Controller'),
+  },
 ];
