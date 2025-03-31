@@ -11,7 +11,7 @@ const items = [
     icon: <MailOutlined />,
   },
   {
-    label: '通知公告',
+    label: '公告管理',
     key: 'announcement',
     icon: <AppstoreOutlined />,
   },
