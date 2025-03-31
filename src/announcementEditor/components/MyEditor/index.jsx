@@ -1,7 +1,9 @@
-import React, { lazy, useState, useEffect, Suspense, useRef } from 'react';
+import React, { lazy, useState, useEffect, Suspense, useRef, useCallback } from 'react';
 import { Style } from 'react-imvc/component';
 import { useCtrl, useModelState, useModelActions } from 'react-imvc/hook';
-import DT from '../../../share/debounce&throttle';
+import { debounce } from 'lodash';
+import { Input } from 'antd';
+const { TextArea } = Input;
 const Editor = lazy(() => import('@wangeditor/editor-for-react').then(module => ({ default: module.Editor })));
 const Toolbar = lazy(() => import('@wangeditor/editor-for-react').then(module => ({ default: module.Toolbar })));
 
@@ -56,15 +58,27 @@ export default function MyEditor({ announcementInfo }) {
     };
   }, [editor]);
 
-  const updateCallBack = DT.debounce((id, content) => {
+  const updateContent = debounce((id, content) => {
     ctrl.updateAnnouncementContentById(id, content);
-  });
+  }, 3000);
 
   return (
     <>
       <Style name="editor" />
       <div>
-        <div style={{ border: '1px solid #ccc', width: 846, height: 50 }}>标题</div>
+        <div style={{ border: '1px solid #ccc', width: 846, maxHeight: 100 }}>
+          <TextArea
+            value={state.announcementInfo?.title}
+            placeholder="标题"
+            style={{ maxHeight: 60, border: '0px solid #FFF', boxShadow: 'unset' }}
+            onChange={e => {
+              const title = e.target.value;
+              actions.UPDATE_ANNOUNCEMENTTITLE(title);
+              document.title = `编辑公告: ${title}`;
+            }}
+            onBlur={e => ctrl.updateAnnouncementTitleById(state.announcementId, e.target.value)}
+          />
+        </div>
         <div style={{ border: '1px solid #ccc', width: 846, zIndex: 1000 }}>
           <Toolbar
             editor={editor}
@@ -77,7 +91,7 @@ export default function MyEditor({ announcementInfo }) {
             value={announcementInfo?.content}
             onCreated={setEditor}
             onChange={editor => {
-              updateCallBack(state.announcementId, editor.getHtml());
+              updateContent(state.announcementId, editor.getHtml());
               actions.UPDATE_ANNOUNCEMENTCONTENT(editor.getHtml());
             }}
             mode="default"
