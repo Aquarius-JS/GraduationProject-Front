@@ -70,4 +70,12 @@ export default class Admin extends Controller {
     });
     return res;
   };
+
+  deleteAnnouncement = async id => {
+    const res = await this.fetch('/deleteAnnouncement', {
+      method: 'POST',
+      body: JSON.stringify({ announcementId: id }),
+    });
+    return res;
+  };
 }

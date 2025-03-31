@@ -10,18 +10,8 @@ export default function () {
   const { announcementBasicInfo } = state;
 
   useEffect(async () => {
-    const res = await ctrl.getAnnouncementBasicInfo();
-    console.log(res);
+    await ctrl.getAnnouncementBasicInfo();
   }, []);
-
-  const handleAdd = async () => {
-    const res = await ctrl.addAnnouncementInfo();
-    if (res.isOk) {
-      window.open(`/announcement/editor?id=${res.data.id}`);
-    }
-  };
-
-  const handleDelete = id => {};
 
   const columns = [
     {
@@ -53,6 +43,12 @@ export default function () {
               </Tag>
             </Space>
           );
+        } else if (record.status === 3) {
+          return (
+            <Tag color="default" bordered={false}>
+              已删除
+            </Tag>
+          );
         }
       },
     },
@@ -74,9 +70,11 @@ export default function () {
       width: 300,
       render: (_, record) => (
         <Space>
-          <Button size="small" type="primary" onClick={() => window.open(`/announcement/editor?id=${record.id}`)}>
-            编辑
-          </Button>
+          {(record.status === 1 || record.status === 2) && (
+            <Button size="small" type="primary" onClick={() => window.open(`/announcement/editor?id=${record.id}`)}>
+              编辑
+            </Button>
+          )}
           {record.status === 1 && (
             <Button
               size="small"
@@ -113,12 +111,28 @@ export default function () {
               撤销
             </Button>
           )}
-          <Button size="small" type="primary" danger onClick={() => handleDelete(record.id)}>
-            删除
-          </Button>
+          {record.status !== 3 && (
+            <Button
+              size="small"
+              type="primary"
+              danger
+              onClick={async () => {
+                const res = await ctrl.deleteAnnouncement(record.id);
+                if (res.isOk) {
+                  message.success(res.message);
+                } else {
+                  message.warning(res.message);
+                }
+                ctrl.getAnnouncementBasicInfo();
+              }}
+            >
+              删除
+            </Button>
+          )}
           <Button
             size="small"
-            type="primary"
+            color="magenta"
+            variant="solid"
             onClick={() => {
               window.open(`/announcement/exhibition?announcementId=${record.id}`, '_blank');
             }}
@@ -135,7 +149,15 @@ export default function () {
       <Style name="announcement" />
       <div className="announcement-container">
         <Space>
-          <Button type="primary" onClick={handleAdd}>
+          <Button
+            type="primary"
+            onClick={async () => {
+              const res = await ctrl.addAnnouncementInfo();
+              if (res.isOk) {
+                window.open(`/announcement/editor?id=${res.data.id}`);
+              }
+            }}
+          >
             新增通知
           </Button>
           <Button
