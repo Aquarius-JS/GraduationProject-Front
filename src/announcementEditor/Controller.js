@@ -8,7 +8,7 @@ export default class Admin extends Controller {
   Model = Model;
 
   preload = {
-    announcement: './announcement/styles/announcement.css',
+    announcement: './announcementEditor/styles/announcement.css',
     editor: './announcementEditor/styles/editor.css',
   };
 

@@ -66,11 +66,11 @@ export default function MyEditor({ announcementInfo }) {
     <>
       <Style name="editor" />
       <div>
-        <div style={{ border: '1px solid #ccc', width: 846, maxHeight: 100 }}>
+        <div className="announcement-title-container">
           <TextArea
+            className="announcement-title"
             value={state.announcementInfo?.title}
             placeholder="标题"
-            style={{ maxHeight: 60, border: '0px solid #FFF', boxShadow: 'unset' }}
             onChange={e => {
               const title = e.target.value;
               actions.UPDATE_ANNOUNCEMENTTITLE(title);
@@ -79,14 +79,10 @@ export default function MyEditor({ announcementInfo }) {
             onBlur={e => ctrl.updateAnnouncementTitleById(state.announcementId, e.target.value)}
           />
         </div>
-        <div style={{ border: '1px solid #ccc', width: 846, zIndex: 1000 }}>
-          <Toolbar
-            editor={editor}
-            defaultConfig={toolbarConfig}
-            mode="default"
-            style={{ borderBottom: '1px solid #ccc' }}
-          />
+        <div className="announcement-content-container">
+          <Toolbar className="toolbar" editor={editor} defaultConfig={toolbarConfig} mode="default" />
           <Editor
+            className="editor"
             defaultConfig={editorConfig}
             value={announcementInfo?.content}
             onCreated={setEditor}
@@ -95,7 +91,6 @@ export default function MyEditor({ announcementInfo }) {
               actions.UPDATE_ANNOUNCEMENTCONTENT(editor.getHtml());
             }}
             mode="default"
-            style={{ height: '600px', overflowY: 'hidden' }}
           />
         </div>
       </div>

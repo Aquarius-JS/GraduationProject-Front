@@ -21,3 +21,30 @@
   border: 0.8px solid black;
   padding: 4px 7px;
 }
+
+.announcement-title-container {
+  border: 1px solid #ccc;
+  width: 846px;
+  max-height: 100px;
+}
+
+.announcement-title {
+  max-height: 60;
+  border: 0px solid #fff;
+  box-shadow: unset !important;
+}
+
+.announcement-content-container {
+  border: 1px solid #ccc;
+  width: 846px;
+  z-index: 1000;
+}
+
+.announcement-content-container .toolbar {
+  border-bottom: 1px solid #ccc;
+}
+
+.announcement-content-container .editor {
+  height: 600px;
+  overflow-y: hidden;
+}
