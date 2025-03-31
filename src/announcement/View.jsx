@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { Style } from 'react-imvc/component';
 import { useModelState } from 'react-imvc/hook';
 
