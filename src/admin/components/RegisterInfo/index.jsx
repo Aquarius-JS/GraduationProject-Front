@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
 import { useCtrl, useModelState } from 'react-imvc/hook';
 import { Table, Image, Button, Space, message, Popover, Input } from 'antd';
+import formatUnix from '../../../share/formatUnix';
 
 export default function () {
   const ctrl = useCtrl();
   const state = useModelState();
   const [rejectReason, setRejectReason] = useState('');
-
-  const formatDate = unixTime => {
-    const date = new Date(unixTime * 1000); // 将秒转换为毫秒
-    return date.toLocaleString('zh-CN', { hour12: false }); // 使用本地时间格式
-  };
 
   const handleApprove = async id => {
     const res = await ctrl.approveRegister(id);
@@ -56,7 +52,7 @@ export default function () {
       title: '登记日期',
       dataIndex: 'filing_date',
       key: 'filing_date',
-      render: date => formatDate(date),
+      render: date => formatUnix(date),
       width: 100,
     },
     {
