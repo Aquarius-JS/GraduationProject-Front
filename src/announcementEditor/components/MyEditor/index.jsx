@@ -3,6 +3,7 @@ import { Style } from 'react-imvc/component';
 import { useCtrl, useModelState, useModelActions } from 'react-imvc/hook';
 import { debounce } from 'lodash';
 import { Input } from 'antd';
+import AttachedFile from './AttachedFile';
 const { TextArea } = Input;
 const Editor = lazy(() => import('@wangeditor/editor-for-react').then(module => ({ default: module.Editor })));
 const Toolbar = lazy(() => import('@wangeditor/editor-for-react').then(module => ({ default: module.Toolbar })));
@@ -94,6 +95,7 @@ export default function MyEditor({ announcementInfo }) {
           />
         </div>
       </div>
+      <AttachedFile />
     </>
   );
 }

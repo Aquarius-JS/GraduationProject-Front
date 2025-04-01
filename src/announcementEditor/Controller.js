@@ -48,4 +48,12 @@ export default class Admin extends Controller {
     });
     return res;
   };
+
+  updateAttachedFileListInfo = async (announcementId, listInfo) => {
+    const res = await this.fetch('/updateAttachedFileListInfo', {
+      method: 'POST',
+      body: JSON.stringify({ announcementId, listInfo }),
+    });
+    return res;
+  };
 }

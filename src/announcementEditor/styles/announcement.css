@@ -1,6 +1,8 @@
 .announcement-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  /* justify-content: center; */
 }
 
 .announcement-info {
@@ -47,4 +49,12 @@
 .announcement-content-container .editor {
   height: 600px;
   overflow-y: hidden;
+}
+
+.attached-file-container {
+  box-sizing: border-box;
+  width: 846px;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
 }

@@ -46,6 +46,16 @@ const UPDATE_ANNOUNCEMENTCONTENT = (state, payload) => {
   };
 };
 
+const UPDATE_ANNOUNCEMENTATTACHEDFILE = (state, payload) => {
+  return {
+    ...state,
+    announcementInfo: {
+      ...state.announcementInfo,
+      attached_file_list_info: payload,
+    },
+  };
+};
+
 export default {
   initialState,
   UPDATE_STATE,
@@ -53,4 +63,5 @@ export default {
   UPDATE_ANNOUNCEMENTINFO,
   UPDATE_ANNOUNCEMENTTITLE,
   UPDATE_ANNOUNCEMENTCONTENT,
+  UPDATE_ANNOUNCEMENTATTACHEDFILE,
 };
