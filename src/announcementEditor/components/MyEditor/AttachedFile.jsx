@@ -51,6 +51,7 @@ export default function () {
     const xhr = new XMLHttpRequest();
     xhr.withCredentials = true;
     xhr.open('POST', url, true);
+    xhr.setRequestHeader('suffix', file.name.split('.').pop());
     xhr.onload = () => {
       const result = JSON.parse(xhr.responseText);
       const fileItem = {
