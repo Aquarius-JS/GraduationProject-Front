@@ -19,6 +19,7 @@ export default class Admin extends Controller {
   };
 
   componentDidFirstMount = () => {
+    document.title = '校园车辆管理后台';
     this.getRegisterInfo();
   };
 
