@@ -4,7 +4,6 @@ import { useModelState } from 'react-imvc/hook';
 
 export default function () {
   const state = useModelState();
-  console.log(state.announcementInfo);
   return (
     <>
       <Style name="announcement" />
