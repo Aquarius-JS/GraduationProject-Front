@@ -6,13 +6,13 @@ import { getURLParameter, updateURLParameter } from '../../../share/url';
 
 const items = [
   {
-    label: '登记信息',
+    label: '车辆登记审批',
     key: 'register_info',
     icon: <MailOutlined />,
   },
   {
-    label: 'Navigation Two',
-    key: 'app',
+    label: '公告管理',
+    key: 'announcement',
     icon: <AppstoreOutlined />,
   },
 ];

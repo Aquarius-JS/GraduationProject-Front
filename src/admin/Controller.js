@@ -8,6 +8,8 @@ export default class Admin extends Controller {
   Model = Model;
   preload = {
     admin: './admin/styles/admin.css',
+    editor: './admin/styles/editor.css',
+    announcement: './admin/styles/announcement.css',
   };
 
   getInitialState = () => {
@@ -17,10 +19,7 @@ export default class Admin extends Controller {
   };
 
   componentDidFirstMount = () => {
-    const tap = this.store.getState().urlParams.tap;
-    if (tap === 'register_info' || tap == undefined) {
-      this.getRegisterInfo();
-    }
+    this.getRegisterInfo();
   };
 
   getRegisterInfo = async () => {
@@ -37,6 +36,45 @@ export default class Admin extends Controller {
     const res = await this.fetch('/admin/rejectRegister', {
       method: 'POST',
       body: JSON.stringify({ registerId, remark }),
+    });
+    return res;
+  };
+
+  getAnnouncementBasicInfo = async () => {
+    const res = await this.fetch('/getAnnouncementBasicInfo', {
+      method: 'POST',
+    });
+    this.store.actions.UPDATE_ANNOUNCEMENTBASICINFO(res ?? []);
+    return res;
+  };
+
+  addAnnouncementInfo = async () => {
+    const res = await this.fetch('/addAnnouncementInfo', {
+      method: 'POST',
+    });
+    return res;
+  };
+
+  publishAnnouncement = async id => {
+    const res = await this.fetch('/publishAnnouncement', {
+      method: 'POST',
+      body: JSON.stringify({ announcementId: id }),
+    });
+    return res;
+  };
+
+  unpublishAnnouncement = async id => {
+    const res = await this.fetch('/unpublishAnnouncement', {
+      method: 'POST',
+      body: JSON.stringify({ announcementId: id }),
+    });
+    return res;
+  };
+
+  deleteAnnouncement = async id => {
+    const res = await this.fetch('/deleteAnnouncement', {
+      method: 'POST',
+      body: JSON.stringify({ announcementId: id }),
     });
     return res;
   };

@@ -3,6 +3,7 @@ import { useCtrl } from 'react-imvc/hook';
 import { Button, Input, Form, Select, Modal, Upload, Space, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import RegisterStep from './RegisterStep';
+import formatUnix from '../../../share/formatUnix';
 
 const { Option } = Select;
 
@@ -18,11 +19,6 @@ export default ({ vehicle }) => {
     3: '审核未通过',
     4: '审核通过',
     5: '成功',
-  };
-
-  const formatDate = unixTime => {
-    const date = new Date(unixTime * 1000);
-    return date.toLocaleString('zh-CN', { hour12: false });
   };
 
   const handleEditChange = (field, value) => {
@@ -99,7 +95,7 @@ export default ({ vehicle }) => {
               {vehicle.vehicle_type === 1 ? '电动车' : '摩托车'} {vehicle.license_number}
             </span>
           </h3>
-          <p>登记日期: {formatDate(vehicle.filing_date)}</p>
+          <p>登记日期: {formatUnix(vehicle.filing_date)}</p>
           <p>学号: {vehicle.stu_number}</p>
           <p>车辆状态: {statusMap[vehicle.vehicle_status]}</p>
         </div>

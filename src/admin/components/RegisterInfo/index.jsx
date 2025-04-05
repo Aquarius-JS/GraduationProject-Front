@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
 import { useCtrl, useModelState } from 'react-imvc/hook';
 import { Table, Image, Button, Space, message, Popover, Input } from 'antd';
+import formatUnix from '../../../share/formatUnix';
 
 export default function () {
   const ctrl = useCtrl();
   const state = useModelState();
   const [rejectReason, setRejectReason] = useState('');
-
-  const formatDate = unixTime => {
-    const date = new Date(unixTime * 1000); // 将秒转换为毫秒
-    return date.toLocaleString('zh-CN', { hour12: false }); // 使用本地时间格式
-  };
 
   const handleApprove = async id => {
     const res = await ctrl.approveRegister(id);
@@ -36,49 +32,51 @@ export default function () {
       title: '学号',
       dataIndex: 'stu_number',
       key: 'stu_number',
-      fixed: 'left',
-      width: 100,
+      width: 50,
     },
     {
       title: '车牌号',
       dataIndex: 'license_number',
       key: 'license_number',
-      width: 30,
+      width: 100,
     },
     {
       title: '车辆类型',
       dataIndex: 'vehicle_type',
       key: 'vehicle_type',
       render: type => (type === 1 ? '电动车' : '摩托车'),
-      width: 50,
+      width: 60,
     },
     {
       title: '登记日期',
       dataIndex: 'filing_date',
       key: 'filing_date',
-      render: date => formatDate(date),
+      render: date => formatUnix(date),
       width: 100,
     },
     {
       title: '学生证照片',
       dataIndex: 'stu_card_img',
       key: 'stu_card_img',
-      render: img => <Image src={img} alt="学生证照片" width={100} height={100} />,
-      width: 100,
+      align: 'center',
+      render: img => <Image src={img} alt="学生证照片" height={100} />,
+      width: 150,
     },
     {
       title: '车辆外观照片',
       dataIndex: 'vehicle_img',
       key: 'vehicle_img',
-      render: img => <Image src={img} alt="车辆外观照片" width={100} height={100} />,
-      width: 100,
+      align: 'center',
+      render: img => <Image src={img} alt="车辆外观照片" height={100} />,
+      width: 150,
     },
     {
       title: '车牌号照片',
       dataIndex: 'license_img',
       key: 'license_img',
-      render: img => <Image src={img} alt="车牌号照片" width={100} height={100} />,
-      width: 100,
+      align: 'center',
+      render: img => <Image src={img} alt="车牌号照片" height={100} />,
+      width: 150,
     },
     {
       title: '操作',
@@ -126,14 +124,17 @@ export default function () {
   ];
 
   return (
-    <Table
-      columns={columns}
-      dataSource={state.registerInfo}
-      rowKey="id"
-      scroll={{ scrollToFirstRowOnChange: true, y: 500 }}
-      bordered
-      size="small"
-      style={{ width: 1000 }}
-    />
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 20 }}>
+      <Table
+        columns={columns}
+        dataSource={state.registerInfo}
+        rowKey="id"
+        pagination={{ pageSize: 10 }}
+        scroll={{ scrollToFirstRowOnChange: true, y: 550, x: true }}
+        bordered
+        size="small"
+        style={{ width: 1400 }}
+      />
+    </div>
   );
 }

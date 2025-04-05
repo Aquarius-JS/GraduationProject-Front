@@ -1,8 +1,8 @@
 const initialState = {
   urlParams: {},
   userInfo: {},
-  registerInfo: [],
-  announcementBasicInfo: [],
+  announcementId: '',
+  announcementInfo: {},
 };
 
 const UPDATE_STATE = (state, payload) => {
@@ -19,17 +19,10 @@ const UPDATE_URLPARAMS = (state, payload) => {
   };
 };
 
-const UPDATE_REGISTERINFO = (state, payload) => {
+const UPDATE_ANNOUNCEMENTINFO = (state, payload) => {
   return {
     ...state,
-    registerInfo: payload,
-  };
-};
-
-const UPDATE_ANNOUNCEMENTBASICINFO = (state, payload) => {
-  return {
-    ...state,
-    announcementBasicInfo: payload,
+    announcementInfo: payload,
   };
 };
 
@@ -37,6 +30,5 @@ export default {
   initialState,
   UPDATE_STATE,
   UPDATE_URLPARAMS,
-  UPDATE_REGISTERINFO,
-  UPDATE_ANNOUNCEMENTBASICINFO,
+  UPDATE_ANNOUNCEMENTINFO,
 };
