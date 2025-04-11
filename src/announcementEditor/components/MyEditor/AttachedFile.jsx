@@ -59,7 +59,7 @@ export default function () {
         url: result.url,
         name: file.name,
       };
-      const oldList = announcementInfo.attached_file_list_info;
+      const oldList = announcementInfo.attached_file_list_info ?? [];
       actions.UPDATE_ANNOUNCEMENTATTACHEDFILE([...oldList, fileItem]);
       message.success('上传成功');
     };
