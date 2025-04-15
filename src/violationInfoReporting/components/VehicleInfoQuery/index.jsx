@@ -65,7 +65,7 @@ export default function () {
         ) : null}
       </div>
 
-      <Spin spinning={loading} size="large" tip="加载中...">
+      <Spin spinning={loading} size="large" tip="加载中..." style={{ height: 200 }}>
         {isSearched && searchResults.length === 0 ? (
           <div className="no-results">
             <div className="no-results-icon">
