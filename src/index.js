@@ -19,4 +19,8 @@ export default [
     path: '/announcement/editor',
     controller: () => import('./announcementEditor/Controller'),
   },
+  {
+    path: '/violationInfoReporting',
+    controller: () => import('./violationInfoReporting/Controller'),
+  },
 ];
