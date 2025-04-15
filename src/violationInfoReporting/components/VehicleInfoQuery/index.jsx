@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useCtrl } from 'react-imvc/hook';
 import { Input, Card, Row, Col, message, Modal, Button, Tag, Divider, Spin } from 'antd';
 import { WarningOutlined, PlusOutlined } from '@ant-design/icons';
+import formatUnix from '../../../share/formatUnix';
 
 export default function () {
   const ctrl = useCtrl();
@@ -100,13 +101,17 @@ export default function () {
         >
           <div className="vehicle-detail">
             {/* 信息部分 */}
+            <div className="detail-item">
+              <span className="label">申请表ID:</span>
+              <span className="value">{selectedVehicle.id}</span>
+            </div>
             <div className="vehicle-info">
               <div className="detail-item">
                 <span className="label">车牌号:</span>
                 <span className="value">{selectedVehicle.license_number}</span>
               </div>
               <div className="detail-item">
-                <span className="label">学号:</span>
+                <span className="label">车主学号:</span>
                 <span className="value">{selectedVehicle.stu_number}</span>
               </div>
               <div className="detail-item">
@@ -121,11 +126,7 @@ export default function () {
               </div>
               <div className="detail-item">
                 <span className="label">登记日期:</span>
-                <span className="value">{selectedVehicle.filing_date}</span>
-              </div>
-              <div className="detail-item">
-                <span className="label">ID:</span>
-                <span className="value">{selectedVehicle.id}</span>
+                <span className="value">{formatUnix(selectedVehicle.filing_date)}</span>
               </div>
             </div>
 
