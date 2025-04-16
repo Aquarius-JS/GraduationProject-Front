@@ -2,6 +2,7 @@ const initialState = {
   urlParams: {},
   searchValue: '',
   searchResults: [],
+  isSearched: false,
 };
 
 const UPDATE_STATE = (state, payload) => {
@@ -32,10 +33,18 @@ const UPDATE_SEARCHRESULTS = (state, payload) => {
   };
 };
 
+const UPDATE_ISSEARCHED = (state, payload) => {
+  return {
+    ...state,
+    isSearched: payload,
+  };
+};
+
 export default {
   initialState,
   UPDATE_STATE,
   UPDATE_URLPARAMS,
   UPDATE_SEARCHVALUE,
   UPDATE_SEARCHRESULTS,
+  UPDATE_ISSEARCHED,
 };

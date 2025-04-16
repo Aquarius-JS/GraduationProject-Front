@@ -9,8 +9,7 @@ export default function () {
   const ctrl = useCtrl();
   const actions = useModelActions();
   const state = useModelState();
-  const { searchValue, searchResults } = state;
-  const [isSearched, setIsSearched] = useState(false);
+  const { searchValue, searchResults, isSearched } = state;
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -23,7 +22,7 @@ export default function () {
     ]);
     const list = res.filter(item => item.isOk === true).reduce((a, b) => a.concat(b.data), []);
     actions.UPDATE_SEARCHRESULTS(list);
-    setIsSearched(true);
+    actions.UPDATE_ISSEARCHED(true);
     setLoading(false);
   };
 

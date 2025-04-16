@@ -16,6 +16,7 @@ export default class ViolationInfoReporting extends Controller {
       urlParams: this.location.query,
       searchValue: '',
       searchResults: [],
+      isSearched: false,
     };
   };
 
@@ -31,6 +32,14 @@ export default class ViolationInfoReporting extends Controller {
     const res = await this.fetch('/getVehicleRegisterInfoByLicense', {
       method: 'POST',
       body: JSON.stringify({ license_number }),
+    });
+    return res;
+  };
+
+  unregisteredVehicleInfoReporting = async unregisteredInfo => {
+    const res = await this.fetch('/unregisteredVehicleInfoReporting', {
+      method: 'POST',
+      body: JSON.stringify(unregisteredInfo),
     });
     return res;
   };
