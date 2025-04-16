@@ -1,8 +1,7 @@
 const initialState = {
   urlParams: {},
-  userInfo: {},
-  registerInfo: [],
-  announcementBasicInfo: [],
+  searchValue: '',
+  searchResults: [],
 };
 
 const UPDATE_STATE = (state, payload) => {
@@ -19,8 +18,24 @@ const UPDATE_URLPARAMS = (state, payload) => {
   };
 };
 
+const UPDATE_SEARCHVALUE = (state, payload) => {
+  return {
+    ...state,
+    searchValue: payload,
+  };
+};
+
+const UPDATE_SEARCHRESULTS = (state, payload) => {
+  return {
+    ...state,
+    searchResults: payload,
+  };
+};
+
 export default {
   initialState,
   UPDATE_STATE,
   UPDATE_URLPARAMS,
+  UPDATE_SEARCHVALUE,
+  UPDATE_SEARCHRESULTS,
 };

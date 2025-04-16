@@ -14,6 +14,8 @@ export default class ViolationInfoReporting extends Controller {
   getInitialState = () => {
     return {
       urlParams: this.location.query,
+      searchValue: '',
+      searchResults: [],
     };
   };
 

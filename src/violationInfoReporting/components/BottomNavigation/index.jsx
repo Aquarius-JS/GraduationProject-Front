@@ -41,6 +41,7 @@ export default function () {
         items={items}
         mode="inline"
         onClick={handleMenuClick}
+        selectedKeys={[tap]}
         defaultSelectedKeys={tap ?? 'vehicle-info-query'}
       />
     </Footer>

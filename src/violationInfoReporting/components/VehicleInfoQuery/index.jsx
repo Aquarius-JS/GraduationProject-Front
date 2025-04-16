@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { useCtrl } from 'react-imvc/hook';
-import { Input, Card, Row, Col, message, Modal, Button, Tag, Divider, Spin } from 'antd';
+import { useCtrl, useModelActions, useModelState } from 'react-imvc/hook';
+import { Input, message, Modal, Button, Tag, Divider, Spin } from 'antd';
 import { WarningOutlined, PlusOutlined } from '@ant-design/icons';
+import { getURLParameter, updateURLParameter } from '../../../share/url';
 import formatUnix from '../../../share/formatUnix';
 
 export default function () {
   const ctrl = useCtrl();
-  const [searchValue, setSearchValue] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
+  const actions = useModelActions();
+  const state = useModelState();
+  const { searchValue, searchResults } = state;
   const [isSearched, setIsSearched] = useState(false);
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -20,7 +22,7 @@ export default function () {
       ctrl.getVehicleRegisterInfoByStuNumber(searchValue),
     ]);
     const list = res.filter(item => item.isOk === true).reduce((a, b) => a.concat(b.data), []);
-    setSearchResults(list);
+    actions.UPDATE_SEARCHRESULTS(list);
     setIsSearched(true);
     setLoading(false);
   };
@@ -53,7 +55,7 @@ export default function () {
           value={searchValue}
           onChange={e => {
             const newChar = e.target.value.toUpperCase();
-            setSearchValue(newChar);
+            actions.UPDATE_SEARCHVALUE(newChar);
           }}
           onSearch={handleSearch}
           loading={loading}
@@ -74,7 +76,20 @@ export default function () {
                 <path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
               </svg>
             </div>
-            <div className="no-results-text">没有找到相关车辆信息</div>
+            <div className="no-results-text">
+              没有找到相关车辆信息
+              <Button
+                type="link"
+                size="small"
+                onClick={async () => {
+                  updateURLParameter('tap', 'unregistered-reporting');
+                  const params = await getURLParameter();
+                  actions.UPDATE_URLPARAMS(params);
+                }}
+              >
+                去上报
+              </Button>
+            </div>
           </div>
         ) : null}
 
