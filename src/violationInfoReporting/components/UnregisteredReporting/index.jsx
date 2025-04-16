@@ -5,6 +5,7 @@ import { UploadOutlined } from '@ant-design/icons';
 
 export default function ReportForm() {
   const ctrl = useCtrl();
+  const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
   // 处理表单提交
   const handleSubmit = async values => {
@@ -38,7 +39,7 @@ export default function ReportForm() {
   return (
     <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto 50px' }}>
       <h2 style={{ marginBottom: '20px' }}>未登记车辆上报</h2>
-      <Form layout="vertical" onFinish={handleSubmit} style={{ maxWidth: '100%' }}>
+      <Form form={form} layout="vertical" onFinish={handleSubmit} style={{ maxWidth: '100%' }}>
         <Form.Item
           name="imgList"
           label="图片上传"
@@ -63,7 +64,21 @@ export default function ReportForm() {
             </div>
           </Upload>
         </Form.Item>
-        <Form.Item name="licenseNumber" label="车牌号" rules={[{ required: true, message: '请输入车牌号！' }]}>
+        <Form.Item
+          name="licenseNumber"
+          label="车牌号"
+          rules={[
+            { required: true, message: '请输入车牌号！' },
+            {
+              pattern: /^[^IO]*$/,
+              message: '车牌号不能包含I和O！',
+              warningOnly: true,
+            },
+          ]}
+          onChange={e => {
+            form.setFieldsValue({ licenseNumber: e.target.value.toUpperCase() });
+          }}
+        >
           <Input placeholder="请输入车牌号" />
         </Form.Item>
         <Form.Item name="detectionLocation" label="检测地点" rules={[{ required: true, message: '请输入检测地点！' }]}>
