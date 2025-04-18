@@ -4,6 +4,7 @@ import { Style } from 'react-imvc/component';
 import BottomNavigation from './components/BottomNavigation';
 import VehicleInfoQuery from './components/VehicleInfoQuery';
 import UnregisteredReporting from './components/UnregisteredReporting';
+import ViolationInfoReporting from './components/ViolationInfoReporting';
 
 export default function () {
   const state = useModelState();
@@ -14,7 +15,7 @@ export default function () {
       <BottomNavigation />
       {tap == undefined && <VehicleInfoQuery />}
       {tap === 'vehicle-info-query' && <VehicleInfoQuery />}
-      {tap === 'violation-reporting' && <div>违规车辆信息上报</div>}
+      {tap === 'violation-reporting' && <ViolationInfoReporting />}
       {tap === 'unregistered-reporting' && <UnregisteredReporting />}
     </>
   );

@@ -43,4 +43,12 @@ export default class ViolationInfoReporting extends Controller {
     });
     return res;
   };
+
+  violationInfoReporting = async violationInfo => {
+    const res = await this.fetch('/violationInfoReporting', {
+      method: 'POST',
+      body: JSON.stringify(violationInfo),
+    });
+    return res;
+  };
 }
