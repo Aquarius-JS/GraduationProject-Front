@@ -31,7 +31,12 @@ export default function () {
     setIsModalVisible(true);
   };
 
-  const handleReportViolation = () => {};
+  const handleReportViolation = async () => {
+    updateURLParameter('tap', 'violation-reporting');
+    updateURLParameter('license_number', selectedVehicle.license_number);
+    const params = await getURLParameter();
+    actions.UPDATE_URLPARAMS(params);
+  };
 
   const vehicleStatusMap = {
     0: { text: '未提交', color: 'warning' },

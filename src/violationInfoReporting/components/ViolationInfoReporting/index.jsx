@@ -1,15 +1,22 @@
-import React, { useState } from 'react';
-import { useCtrl } from 'react-imvc/hook';
+import React, { useEffect, useState } from 'react';
+import { useCtrl, useModelState } from 'react-imvc/hook';
 import { Form, Input, Button, Upload, message, Select } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
+import { getURLParameter, updateURLParameter } from '../../../share/url';
 
 export default function ReportForm() {
   const ctrl = useCtrl();
+  const state = useModelState();
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
 
+  useEffect(() => {
+    form.setFieldsValue({
+      licenseNumber: state.urlParams.license_number,
+    });
+  }, []);
+
   const handleSubmit = async values => {
-    console.log(values);
     const res = await ctrl.violationInfoReporting({
       ...values,
       reportingSource: 1,
@@ -20,6 +27,9 @@ export default function ReportForm() {
       message.success(res.message);
       form.resetFields();
       setFileList([]);
+      updateURLParameter('license_number', '');
+      const params = await getURLParameter();
+      actions.UPDATE_URLPARAMS(params);
     } else {
       message.warning(res.message);
     }
