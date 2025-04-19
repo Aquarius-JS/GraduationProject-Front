@@ -51,4 +51,15 @@ export default class ViolationInfoReporting extends Controller {
     });
     return res;
   };
+
+  imgOcr = async img => {
+    const res = await this.fetch('/imgOcr', {
+      method: 'POST',
+      body: img,
+      headers: {
+        'Content-Type': img.type,
+      },
+    });
+    return res;
+  };
 }
