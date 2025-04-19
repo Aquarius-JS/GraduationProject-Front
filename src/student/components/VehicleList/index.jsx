@@ -37,7 +37,6 @@ export default function () {
       key: 'id',
       render: id => (
         <>
-          {console.log(id)}
           <Button
             onClick={async () => {
               const res = await ctrl.leavingRegister({ registerId: id });

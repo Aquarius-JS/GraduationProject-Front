@@ -15,6 +15,11 @@ const items = [
     key: 'announcement',
     icon: <AppstoreOutlined />,
   },
+  {
+    label: '违规信息管理',
+    key: 'violation_info',
+    icon: <SettingOutlined />,
+  },
 ];
 
 export default function () {

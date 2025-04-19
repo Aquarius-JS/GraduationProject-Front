@@ -18,35 +18,32 @@ export default function MyEditor({ announcementInfo }) {
     placeholder: '请输入内容...',
     MENU_CONF: {
       uploadImage: {
-        onBeforeUpload(file) {
-          console.log(file, '@@@');
-          return file;
+        customUpload: async (file, insertFn) => {
+          const xhr = new XMLHttpRequest();
+          xhr.withCredentials = true;
+          xhr.open('POST', 'http://localhost:3000/uploadFile', true);
+          xhr.setRequestHeader('suffix', file.name.split('.').pop());
+          xhr.onload = () => {
+            const result = JSON.parse(xhr.responseText);
+            insertFn(result.url);
+          };
+          xhr.upload.onprogress = e => {};
+          xhr.send(file);
         },
-
-        // 上传进度的回调函数
-        onProgress(progress) {
-          console.log('progress', progress);
+      },
+      uploadVideo: {
+        customUpload: async (file, insertFn) => {
+          const xhr = new XMLHttpRequest();
+          xhr.withCredentials = true;
+          xhr.open('POST', 'http://localhost:3000/uploadFile', true);
+          xhr.setRequestHeader('suffix', file.name.split('.').pop());
+          xhr.onload = () => {
+            const result = JSON.parse(xhr.responseText);
+            insertFn(result.url);
+          };
+          xhr.upload.onprogress = e => {};
+          xhr.send(file);
         },
-
-        onSuccess(file, res) {
-          console.log(`${file.name} 上传成功`, res);
-        },
-
-        onFailed(file, res) {
-          console.log(`${file.name} 上传失败`, res);
-        },
-
-        // 上传错误，或者触发 timeout 超时
-        onError(file, err, res) {
-          console.log(`${file.name} 上传出错`, err, res);
-        },
-        customInsert(res, insertFn) {
-          // res 即服务端的返回结果
-
-          // 从 res 中找到 url alt href ，然后插入图片
-          insertFn(url, alt, href);
-        },
-        base64LimitSize: 5 * 1024,
       },
     },
   };

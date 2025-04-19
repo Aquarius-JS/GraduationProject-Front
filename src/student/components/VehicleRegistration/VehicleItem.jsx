@@ -48,7 +48,6 @@ export default ({ vehicle }) => {
       message.warning('请上传车牌号照片');
       return;
     }
-    console.log(editedVehicle);
     const res = await ctrl.modificationRegisterInfo({
       ...editedVehicle,
       registerId: editedVehicle.id,
