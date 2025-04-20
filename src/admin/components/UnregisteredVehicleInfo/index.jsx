@@ -151,27 +151,6 @@ export default function () {
     <>
       <Style name="announcement" />
       <div className="announcement-container">
-        <Space>
-          <Button
-            type="primary"
-            onClick={async () => {
-              const res = await ctrl.addAnnouncementInfo();
-              if (res.isOk) {
-                window.open(`/announcement/editor?id=${res.data.id}`);
-              }
-            }}
-          >
-            新增通知
-          </Button>
-          <Button
-            onClick={async () => {
-              await ctrl.getAnnouncementBasicInfo();
-              message.success('更新成功');
-            }}
-          >
-            刷新
-          </Button>
-        </Space>
         <Table
           columns={columns}
           dataSource={unregisteredVehicleInfo}
