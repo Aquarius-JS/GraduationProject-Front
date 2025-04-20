@@ -10,7 +10,12 @@ export default function ReportForm() {
   // 处理表单提交
   const handleSubmit = async values => {
     console.log(values);
-    const res = await ctrl.unregisteredVehicleInfoReporting({ ...values, reportingSource: 1, imgList: fileList });
+    const res = await ctrl.unregisteredVehicleInfoReporting({
+      ...values,
+      reportingSource: 1,
+      imgList: fileList,
+      status: 1,
+    });
     if (res.isOk) {
       message.success(res.message);
     } else {

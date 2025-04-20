@@ -20,6 +20,11 @@ const items = [
     key: 'violation_info',
     icon: <SettingOutlined />,
   },
+  {
+    label: '未登记车辆信息管理',
+    key: 'unregistered-reporting',
+    icon: <SettingOutlined />,
+  },
 ];
 
 export default function () {

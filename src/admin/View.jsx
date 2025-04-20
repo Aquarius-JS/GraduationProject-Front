@@ -5,6 +5,8 @@ import { Layout } from 'antd';
 import Menu from './components/Menu/index';
 import RegisterInfo from './components/RegisterInfo/index';
 import Announcement from './components/Announcement';
+import ViolationInfo from './components/ViolationInfo';
+import UnregisteredVehicleInfo from './components/UnregisteredVehicleInfo';
 
 const { Header, Sider, Content } = Layout;
 
@@ -24,6 +26,8 @@ export default function () {
             {tap == undefined && <RegisterInfo />}
             {tap === 'register_info' && <RegisterInfo />}
             {tap === 'announcement' && <Announcement />}
+            {tap === 'violation_info' && <ViolationInfo />}
+            {tap === 'unregistered-reporting' && <UnregisteredVehicleInfo />}
           </Content>
         </Layout>
       </Layout>

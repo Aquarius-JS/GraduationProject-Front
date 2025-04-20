@@ -79,4 +79,34 @@ export default class Admin extends Controller {
     });
     return res;
   };
+
+  getAllViolationInfo = async () => {
+    const res = await this.fetch('/getAllViolationInfo', {
+      method: 'POST',
+    });
+    return res;
+  };
+
+  getAllUnregisteredVehicleInfo = async () => {
+    const res = await this.fetch('/getAllUnregisteredVehicleInfo', {
+      method: 'POST',
+    });
+    return res;
+  };
+
+  approveViolationInfo = async data => {
+    const res = await this.fetch('/approveViolationInfo', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+    return res;
+  };
+
+  approveUnregisteredVehicleInfo = async data => {
+    const res = await this.fetch('/approveUnregisteredVehicleInfo', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+    return res;
+  };
 }
