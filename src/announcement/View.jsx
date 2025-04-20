@@ -9,7 +9,7 @@ export default function () {
       <Style name="announcement" />
       <div className="announcement-container">
         <div className="announcement-info" dangerouslySetInnerHTML={{ __html: state.announcementInfo?.content }} />
-        {state.announcementInfo?.attached_file_list_info && (
+        {state.announcementInfo?.attached_file_list_info?.length > 0 && (
           <div className="attached-file">
             <p style={{ color: 'gray' }}>附件:</p>
             {state.announcementInfo.attached_file_list_info.map(item => {
