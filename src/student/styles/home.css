@@ -62,6 +62,12 @@
   font-size: 14px;
 }
 
+.announcement-list {
+  height: calc(100vh - 150px);
+  overflow: scroll;
+  scrollbar-width: none;
+}
+
 .announcement-item {
   margin-bottom: 5px;
   border-bottom: 1px solid rgba(0, 0, 0, 0);
@@ -93,4 +99,17 @@
 .announcement-date {
   font-size: 14px;
   color: #666;
+}
+
+.announcement-search {
+  margin-bottom: 10px;
+  box-shadow: none !important;
+}
+
+.announcement-search:hover {
+  border: 0.8px solid rgb(202, 202, 202);
+}
+
+.announcement-search:focus {
+  border: 0.8px solid rgb(202, 202, 202);
 }
