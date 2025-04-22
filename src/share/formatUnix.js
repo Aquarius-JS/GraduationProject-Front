@@ -32,3 +32,11 @@ export const formatUnixToDate = (unixTime, type = '/') => {
   const day = date.getDate();
   return month + type + day;
 };
+
+export const formatUnixToYMD = unixTime => {
+  const date = new Date(unixTime * 1000);
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  return year + '年' + month + '月' + day + '日';
+};
