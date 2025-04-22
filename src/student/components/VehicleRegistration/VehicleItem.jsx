@@ -14,11 +14,12 @@ export default ({ vehicle }) => {
 
   const statusMap = {
     0: '未提交',
-    1: '已登记',
-    2: '审核流程中',
-    3: '审核未通过',
-    4: '审核通过',
-    5: '成功',
+    1: '审核中',
+    2: '审核通过',
+    3: '在校',
+    4: '离校',
+    5: '审核未通过',
+    6: '取消登记',
   };
 
   const handleEditChange = (field, value) => {

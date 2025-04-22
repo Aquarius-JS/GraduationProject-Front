@@ -25,6 +25,11 @@ const items = [
     key: 'unregistered-reporting',
     icon: <SettingOutlined />,
   },
+  {
+    label: '监控设备管理',
+    key: 'monitoring-equipment',
+    icon: <SettingOutlined />,
+  },
 ];
 
 export default function () {

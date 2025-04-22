@@ -18,8 +18,10 @@ export default class Home extends AuthorizationController {
   };
 
   componentDidFirstMount = async () => {
-    const res = await this.stuFetch('/getStudentAndVehicleInfo', { method: 'POST' });
-    this.store.actions.UPDATE_STATE(res);
+    await this.getStudentAndVehicleInfo();
+    const licList = this.store.getState().vehicleInfo.map(item => item.license_number);
+    this.getViolationInfoByLicenseNumberList(licList);
+    this.getAnnouncementBasicInfo();
   };
 
   getVehicleInfoByStuToken = async () => {
@@ -88,6 +90,25 @@ export default class Home extends AuthorizationController {
       method: 'POST',
       body: JSON.stringify(newRegisterInfo),
     });
+    return res;
+  };
+
+  getStudentAndVehicleInfo = async () => {
+    const res = await this.stuFetch('/getStudentAndVehicleInfo', { method: 'POST' });
+    this.store.actions.UPDATE_STATE(res);
+  };
+
+  getViolationInfoByLicenseNumberList = async licenseNumberList => {
+    const violationInfoList = await this.stuFetch('/getViolationInfoByLicenseNumberList', {
+      method: 'POST',
+      body: JSON.stringify({ licenseNumberList }),
+    });
+    this.store.actions.UPDATE_VIOLATIONINFOLIST(violationInfoList);
+  };
+
+  getAnnouncementBasicInfo = async () => {
+    const res = await this.stuFetch('/getAnnouncementBasicInfo', { method: 'POST' });
+    this.store.actions.UPDATE_ANNOUNCEMENTBASICINFO(res.filter(item => item.status === 2));
     return res;
   };
 }

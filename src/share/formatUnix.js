@@ -21,3 +21,14 @@ export default (unixTime, type = '/') => {
     return date.toLocaleString('zh-CN', { hour12: false }).replaceAll('/', type);
   }
 };
+
+/**
+ * @description: 将Unix时间戳转换为日期格式
+ * @param {number} unixTime - Unix时间戳
+ */
+export const formatUnixToDate = (unixTime, type = '/') => {
+  const date = new Date(unixTime * 1000);
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  return month + type + day;
+};
