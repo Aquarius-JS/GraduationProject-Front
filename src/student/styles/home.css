@@ -113,3 +113,58 @@
 .announcement-search:focus {
   border: 0.8px solid rgb(202, 202, 202);
 }
+
+.vio-drawer .ant-drawer-body {
+  padding: 10px 24px;
+}
+
+.vio-title {
+  margin: 0 0 13px !important;
+  height: 20px;
+}
+
+.vio-sys-notice {
+  margin-bottom: 10px;
+}
+
+.vio-sys-notice .ant-card-body {
+  padding: 5px 15px;
+}
+
+.vio-notice-top {
+  width: 100%;
+  margin-bottom: 2px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.vio-notice-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.vio-sys-notice-label {
+  display: inline-block;
+  width: 45px;
+  color: rgb(152, 152, 152);
+  text-align-last: justify;
+  margin-right: 10px;
+}
+
+.vio-license-number,
+.vio-reporting-time,
+.vio-reporting-location {
+  color: rgb(94, 94, 94);
+  font-weight: 500;
+}
+
+.vio-type-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.vio-type-list {
+  width: 240px;
+  line-height: 28px;
+}

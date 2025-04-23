@@ -1,24 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { useModelState } from 'react-imvc/hook';
-import { Avatar, Badge, Drawer, Input, Spin, Empty } from 'antd';
+import { Avatar, Button, Badge, Drawer, Input, Spin, Empty, Card, Tag, Divider } from 'antd';
 import { UserOutlined, BellOutlined, LinkOutlined } from '@ant-design/icons';
-import { formatUnixToDate } from '../../../share/formatUnix';
+import formatUnix, { formatUnixToDate } from '../../../share/formatUnix';
 import { debounce } from 'lodash';
 
 export default function () {
   const state = useModelState();
   const userInfo = state.userInfo;
   const violationInfoList = state.violationInfoList;
+  const notReadAndStatusNormalViolationInfoList = violationInfoList?.filter(
+    item => item.have_read === 0 && item.status !== 0
+  );
   const announcementBasicInfo = state.announcementBasicInfo;
   const [computedAnnBasicInfo, setComputedAnnBasicInfo] = useState([]); //公告通知列表
   const [annDrawerSwitch, setAnnDrawerSwitch] = useState(false); //通知框开关
+  const [sysNoticeDrawerSwitch, setSysNoticeDrawerSwitch] = useState(false);
   const [annIsSearching, setAnnIsSearching] = useState(false);
 
   useEffect(() => {
     setComputedAnnBasicInfo(announcementBasicInfo);
   }, [announcementBasicInfo]);
 
-  const computeAnnBasicInfo = debounce(searchValue => { //TODO: fix防抖bug
+  const computeAnnBasicInfo = debounce(searchValue => {
+    //TODO: fix防抖bug
     if (searchValue === '') {
       setComputedAnnBasicInfo(announcementBasicInfo);
     } else {
@@ -31,12 +36,15 @@ export default function () {
     <>
       <div className="header-container">
         <div className="avatar-container">
-          <Badge
-            count={violationInfoList?.reduce((count, item) => (item.have_read === 0 ? count + 1 : count), 0)}
-            size="small"
-            offset={[-2, 6]}
-          >
-            <Avatar size={40} icon={<UserOutlined />} src={userInfo?.user_img} />
+          <Badge count={notReadAndStatusNormalViolationInfoList?.length ?? 0} size="small" offset={[-2, 6]}>
+            <Avatar
+              size={40}
+              icon={<UserOutlined />}
+              src={userInfo?.user_img}
+              onClick={() => {
+                setSysNoticeDrawerSwitch(true);
+              }}
+            />
           </Badge>
           <div className="avatar-text">
             <span>{userInfo?.user_name}</span>
@@ -45,7 +53,7 @@ export default function () {
         </div>
         <div className="stu-header-right">
           <Avatar
-            size={40}
+            size={35}
             icon={<BellOutlined />}
             onClick={() => {
               setAnnDrawerSwitch(true);
@@ -53,6 +61,64 @@ export default function () {
           />
         </div>
       </div>
+      <Drawer
+        className="vio-drawer"
+        title="系统消息"
+        placement="left"
+        onClose={() => {
+          setSysNoticeDrawerSwitch(false);
+        }}
+        open={sysNoticeDrawerSwitch}
+      >
+        {notReadAndStatusNormalViolationInfoList?.length > 0 ? (
+          <Divider className="vio-title" orientation="start">
+            <span>违规信息：</span>
+          </Divider>
+        ) : null}
+        {notReadAndStatusNormalViolationInfoList?.map(item => {
+          return (
+            <Card className="vio-sys-notice" size="small" hoverable={true}>
+              <div className="vio-notice-top">
+                <span className="vio-license-container">
+                  <span className="vio-license-label vio-sys-notice-label">车牌号</span>
+                  <span className="vio-license-number">{item.license_number}</span>
+                </span>
+                <Button size="small" color="primary" variant="link">
+                  详情
+                </Button>
+              </div>
+              <div className="vio-notice-main">
+                <span className="vio-reporting-time-container">
+                  <span className="vio-reporting-time-label vio-sys-notice-label">时间</span>
+                  <span className="vio-reporting-time">{formatUnix(item.reporting_time)}</span>
+                </span>
+                <span className="vio-reporting-location-container">
+                  <span className="vio-reporting-locationlabel vio-sys-notice-label">地点</span>
+                  <span className="vio-reporting-location">{item.detection_location}</span>
+                </span>
+                <span className="vio-type-container">
+                  <span className="vio-sys-notice-label">类型</span>
+                  <span className="vio-type-list">
+                    {item.violation_title.map(vio => {
+                      return (
+                        <Tag
+                          color={
+                            vio === '超载' ? 'red' : vio === '超速' ? 'error' : vio === '违停' ? 'volcano' : 'warning'
+                          }
+                          bordered={false}
+                          key={vio}
+                        >
+                          {vio}
+                        </Tag>
+                      );
+                    })}
+                  </span>
+                </span>
+              </div>
+            </Card>
+          );
+        })}
+      </Drawer>
       <Drawer
         title="公告通知"
         onClose={() => {
