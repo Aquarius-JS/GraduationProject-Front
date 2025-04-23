@@ -4,6 +4,10 @@ const initialState = {
   vehicleInfo: [],
   violationInfoList: [],
   announcementBasicInfo: [],
+  violationInfoModalData: {
+    isModalOpen: false,
+    violationInfoId: '',
+  },
 };
 
 const UPDATE_STATE = (state, payload) => {
@@ -48,6 +52,13 @@ const UPDATE_ANNOUNCEMENTBASICINFO = (state, payload) => {
   };
 };
 
+const UPDATE_VIOLATIONINFOMODALDATA = (state, payload) => {
+  return {
+    ...state,
+    violationInfoModalData: payload,
+  };
+};
+
 export default {
   initialState,
   UPDATE_STATE,
@@ -56,4 +67,5 @@ export default {
   UPDATE_VEHICLEINFO,
   UPDATE_VIOLATIONINFOLIST,
   UPDATE_ANNOUNCEMENTBASICINFO,
+  UPDATE_VIOLATIONINFOMODALDATA,
 };

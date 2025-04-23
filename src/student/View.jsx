@@ -7,6 +7,7 @@ import Menu from './components/Menu/index';
 import VehicleList from './components/VehicleList/index';
 import VehicleRegistration from './components/VehicleRegistration';
 import PersonalInfo from './components/PersonalInfo/index';
+import ViolationInfoModal from './components/ViolationInfoModal';
 const { Header, Sider, Content } = Layout;
 
 export default function () {
@@ -33,6 +34,7 @@ export default function () {
           </Content>
         </Layout>
       </Layout>
+      <ViolationInfoModal />
     </>
   );
 }

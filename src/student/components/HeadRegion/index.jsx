@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useModelState } from 'react-imvc/hook';
+import { useModelActions, useModelState } from 'react-imvc/hook';
 import { Avatar, Button, Badge, Drawer, Input, Spin, Empty, Card, Tag, Divider } from 'antd';
 import { UserOutlined, BellOutlined, LinkOutlined } from '@ant-design/icons';
 import formatUnix, { formatUnixToDate } from '../../../share/formatUnix';
@@ -7,6 +7,7 @@ import { debounce } from 'lodash';
 
 export default function () {
   const state = useModelState();
+  const actions = useModelActions();
   const userInfo = state.userInfo;
   const violationInfoList = state.violationInfoList;
   const notReadAndStatusNormalViolationInfoList = violationInfoList?.filter(
@@ -83,7 +84,18 @@ export default function () {
                   <span className="vio-license-label vio-sys-notice-label">车牌号</span>
                   <span className="vio-license-number">{item.license_number}</span>
                 </span>
-                <Button size="small" color="primary" variant="link">
+                <Button
+                  size="small"
+                  color="primary"
+                  variant="link"
+                  onClick={() => {
+                    console.log('!!!', item.id);
+                    actions.UPDATE_VIOLATIONINFOMODALDATA({
+                      isModalOpen: true,
+                      violationInfoId: item.id,
+                    });
+                  }}
+                >
                   详情
                 </Button>
               </div>

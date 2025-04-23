@@ -14,6 +14,10 @@ export default class Home extends AuthorizationController {
   getInitialState = () => {
     return {
       urlParams: this.location.query,
+      violationInfoModalData: {
+        isModalOpen: false,
+        violationInfo: {},
+      },
     };
   };
 
@@ -109,6 +113,11 @@ export default class Home extends AuthorizationController {
   getAnnouncementBasicInfo = async () => {
     const res = await this.stuFetch('/getAnnouncementBasicInfo', { method: 'POST' });
     this.store.actions.UPDATE_ANNOUNCEMENTBASICINFO(res.filter(item => item.status === 2));
+    return res;
+  };
+
+  violationInfoHaveRead = async id => {
+    const res = await this.stuFetch('/violationInfoHaveRead', { method: 'POST', body: JSON.stringify({ id }) });
     return res;
   };
 }
