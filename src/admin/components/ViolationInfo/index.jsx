@@ -11,6 +11,7 @@ export default function () {
   const [selectedRecord, setSelectedRecord] = useState(null); // 当前选中的记录
   const [isModalVisible, setIsModalVisible] = useState(false); // 控制 Modal 显示
   const [approvalComment, setApprovalComment] = useState(''); // 审批意见
+  const [appealResponse, setAppealResponse] = useState(''); //申诉处理意见
 
   useEffect(async () => {
     const res = await ctrl.getAllViolationInfo();
@@ -34,6 +35,23 @@ export default function () {
     } else {
       message.warning(res.message);
     }
+    setApprovalComment('');
+  };
+
+  const appealHandle = async (id, status, appealResponse) => {
+    const res = await ctrl.violationInfoAppealHandle({ id, status, appealResponse });
+    if (res.isOk) {
+      message.success(res.message);
+      const updatedViolationInfo = violationInfo.map(item =>
+        item.id === id ? { ...item, status, appeal_response: appealResponse } : item
+      );
+      setViolationInfo(updatedViolationInfo);
+      setSelectedRecord({ ...selectedRecord, status, appeal_response: appealResponse });
+      setAppealResponse('');
+    } else {
+      message.warning(res.message);
+    }
+    setAppealResponse('');
   };
 
   const columns = [
@@ -113,32 +131,44 @@ export default function () {
       key: 'status',
       width: 100,
       align: 'center',
-      filtered: true,
-      filters: [
-        {
-          text: '待审核',
-          value: 0,
-        },
-        {
-          text: '正常',
-          value: 1,
-        },
-        {
-          text: '作废',
-          value: 2,
-        },
-      ],
-      defaultFilteredValue: ['0', '1'],
-      onFilter: (value, record) => record.status === value,
       render: (_, record) => {
         const status = record.status;
         return (
           <Tag
-            color={status === 0 ? 'warning' : status === 1 ? 'green' : status === 2 ? 'gray' : 'blue'}
             bordered={false}
-            key={record.id}
+            color={
+              status === 0
+                ? 'warning'
+                : status === 1
+                ? 'green'
+                : status === 2
+                ? 'gray'
+                : status === 3
+                ? 'warning'
+                : status === 4
+                ? 'gray'
+                : status === 5
+                ? 'green'
+                : status === 6
+                ? 'gray'
+                : 'gray'
+            }
           >
-            {status === 0 ? '待审核' : status === 1 ? '正常' : status === 2 ? '作废' : '其他'}
+            {status === 0
+              ? '待审核'
+              : status === 1
+              ? '正常'
+              : status === 2
+              ? '作废'
+              : status === 3
+              ? '申诉中'
+              : status === 4
+              ? '申诉通过'
+              : status === 5
+              ? '申诉未通过'
+              : status === 6
+              ? '已核销'
+              : '其他'}
           </Tag>
         );
       },
@@ -240,7 +270,15 @@ export default function () {
                     ? 'green'
                     : selectedRecord.status === 2
                     ? 'gray'
-                    : 'blue'
+                    : selectedRecord.status === 3
+                    ? 'warning'
+                    : selectedRecord.status === 4
+                    ? 'gray'
+                    : selectedRecord.status === 5
+                    ? 'green'
+                    : selectedRecord.status === 6
+                    ? 'gray'
+                    : 'gray'
                 }
               >
                 {selectedRecord.status === 0
@@ -249,6 +287,14 @@ export default function () {
                   ? '正常'
                   : selectedRecord.status === 2
                   ? '作废'
+                  : selectedRecord.status === 3
+                  ? '申诉中'
+                  : selectedRecord.status === 4
+                  ? '申诉通过'
+                  : selectedRecord.status === 5
+                  ? '申诉未通过'
+                  : selectedRecord.status === 6
+                  ? '已核销'
                   : '其他'}
               </Tag>
             </Descriptions.Item>
@@ -289,6 +335,34 @@ export default function () {
                   </Button>
                   <Button type="primary" danger onClick={() => handleApprove(selectedRecord.id, 2, approvalComment)}>
                     取消违规
+                  </Button>
+                </Space>
+              </div>
+            </div>
+          )}
+          {selectedRecord && selectedRecord.status === 3 && (
+            <div style={{ marginTop: 20 }}>
+              <div style={{ marginBottom: 15 }}>
+                <label style={{ display: 'block', fontWeight: 600, marginBottom: 8 }}>申诉结果</label>
+                <Input.TextArea
+                  value={appealResponse}
+                  onChange={e => setAppealResponse(e.target.value)}
+                  placeholder="请输入申诉审核结果"
+                  autoSize={{ minRows: 3, maxRows: 6 }}
+                  style={{ width: '100%' }}
+                />
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Space size="middle">
+                  <Button
+                    color="cyan"
+                    variant="solid"
+                    onClick={() => appealHandle(selectedRecord.id, 4, appealResponse)}
+                  >
+                    申诉通过
+                  </Button>
+                  <Button type="primary" danger onClick={() => appealHandle(selectedRecord.id, 5, appealResponse)}>
+                    申诉拒绝
                   </Button>
                 </Space>
               </div>
