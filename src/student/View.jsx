@@ -7,6 +7,7 @@ import Menu from './components/Menu/index';
 import VehicleList from './components/VehicleList/index';
 import VehicleRegistration from './components/VehicleRegistration';
 import PersonalInfo from './components/PersonalInfo/index';
+import ViolationInfoList from './components/ViolationInfoList';
 import ViolationInfoModal from './components/ViolationInfoModal';
 const { Header, Sider, Content } = Layout;
 
@@ -29,7 +30,7 @@ export default function () {
             {tap == undefined && <VehicleList />}
             {tap === 'mycar' && <VehicleList />}
             {tap === 'carregister' && <VehicleRegistration />}
-            {tap === 'illegalinfo' && <div>违规信息</div>}
+            {tap === 'illegalinfo' && <ViolationInfoList />}
             {tap === 'personalinfo' && <PersonalInfo />}
           </Content>
         </Layout>

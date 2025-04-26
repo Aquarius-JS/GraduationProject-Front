@@ -120,4 +120,12 @@ export default class Home extends AuthorizationController {
     const res = await this.stuFetch('/violationInfoHaveRead', { method: 'POST', body: JSON.stringify({ id }) });
     return res;
   };
+
+  violationInfoAppeal = async (id, appealReason) => {
+    const res = await this.stuFetch('/violationInfoAppeal', {
+      method: 'POST',
+      body: JSON.stringify({ id, appealReason }),
+    });
+    return res;
+  };
 }
