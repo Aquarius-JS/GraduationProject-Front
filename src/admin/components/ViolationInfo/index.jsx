@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Style } from 'react-imvc/component';
 import { useCtrl, useModelState } from 'react-imvc/hook';
 import { Input, Table, Button, Tag, Space, Modal, Descriptions, Image, message } from 'antd';
+import StatusTag from '../TagComponents/StatusTag';
+import ReportingSourceTag from '../TagComponents/ReportingSourceTag';
+import ViolationTagList from '../TagComponents/ViolationTagList';
 import formatUnix from '../../../share/formatUnix';
 
 export default function () {
@@ -67,19 +70,7 @@ export default function () {
       key: 'violation_title',
       width: 260,
       align: 'center',
-      render: (_, record) => {
-        return record.violation_title.map(item => {
-          return (
-            <Tag
-              color={item === '超载' ? 'red' : item === '超速' ? 'error' : item === '违停' ? 'volcano' : 'warning'}
-              bordered={false}
-              key={item}
-            >
-              {item}
-            </Tag>
-          );
-        });
-      },
+      render: (_, record) => <ViolationTagList violationTitle={record.violation_title} />,
     },
     {
       title: '违规地点',
@@ -113,65 +104,14 @@ export default function () {
       filtered: true,
       defaultFilteredValue: ['0', '1'],
       onFilter: (value, record) => record.reporting_source === value,
-      render: (_, record) => {
-        const reporting_source = record.reporting_source;
-        return (
-          <Tag
-            color={reporting_source === 0 ? 'cyan' : reporting_source === 1 ? 'blue' : 'lime'}
-            bordered={false}
-            key={record.id}
-          >
-            {reporting_source === 0 ? '机器' : reporting_source === 1 ? '人工' : '其他'}
-          </Tag>
-        );
-      },
+      render: (_, record) => <ReportingSourceTag reportingSource={record.reporting_source} />,
     },
     {
       title: '状态',
       key: 'status',
       width: 100,
       align: 'center',
-      render: (_, record) => {
-        const status = record.status;
-        return (
-          <Tag
-            bordered={false}
-            color={
-              status === 0
-                ? 'warning'
-                : status === 1
-                ? 'green'
-                : status === 2
-                ? 'gray'
-                : status === 3
-                ? 'warning'
-                : status === 4
-                ? 'gray'
-                : status === 5
-                ? 'green'
-                : status === 6
-                ? 'gray'
-                : 'gray'
-            }
-          >
-            {status === 0
-              ? '待审核'
-              : status === 1
-              ? '正常'
-              : status === 2
-              ? '作废'
-              : status === 3
-              ? '申诉中'
-              : status === 4
-              ? '申诉通过'
-              : status === 5
-              ? '申诉未通过'
-              : status === 6
-              ? '已核销'
-              : '其他'}
-          </Tag>
-        );
-      },
+      render: (_, record) => <StatusTag status={record.status} />,
     },
     {
       title: '操作',
@@ -226,77 +166,19 @@ export default function () {
               {selectedRecord.license_number}
             </Descriptions.Item>
             <Descriptions.Item label="违规类型" span={1}>
-              {selectedRecord.violation_title.map(item => (
-                <Tag
-                  bordered={false}
-                  color={item === '超载' ? 'red' : item === '超速' ? 'error' : item === '违停' ? 'volcano' : 'warning'}
-                  key={item}
-                >
-                  {item}
-                </Tag>
-              ))}
+              <ViolationTagList violationTitle={selectedRecord.violation_title ?? []} />
             </Descriptions.Item>
             <Descriptions.Item label="违规时间" span={1}>
               {formatUnix(selectedRecord.reporting_time)}
             </Descriptions.Item>
             <Descriptions.Item label="信息来源" span={1}>
-              <Tag
-                bordered={false}
-                color={
-                  selectedRecord.reporting_source === 0
-                    ? 'cyan'
-                    : selectedRecord.reporting_source === 1
-                    ? 'blue'
-                    : 'lime'
-                }
-              >
-                {selectedRecord.reporting_source === 0
-                  ? '机器'
-                  : selectedRecord.reporting_source === 1
-                  ? '人工'
-                  : '其他'}
-              </Tag>
+              <ReportingSourceTag reportingSource={selectedRecord.reporting_source} />
             </Descriptions.Item>
             <Descriptions.Item label="违规地点" span={1}>
               {selectedRecord.detection_location}
             </Descriptions.Item>
             <Descriptions.Item label="状态" span={1}>
-              <Tag
-                bordered={false}
-                color={
-                  selectedRecord.status === 0
-                    ? 'warning'
-                    : selectedRecord.status === 1
-                    ? 'green'
-                    : selectedRecord.status === 2
-                    ? 'gray'
-                    : selectedRecord.status === 3
-                    ? 'warning'
-                    : selectedRecord.status === 4
-                    ? 'gray'
-                    : selectedRecord.status === 5
-                    ? 'green'
-                    : selectedRecord.status === 6
-                    ? 'gray'
-                    : 'gray'
-                }
-              >
-                {selectedRecord.status === 0
-                  ? '待审核'
-                  : selectedRecord.status === 1
-                  ? '正常'
-                  : selectedRecord.status === 2
-                  ? '作废'
-                  : selectedRecord.status === 3
-                  ? '申诉中'
-                  : selectedRecord.status === 4
-                  ? '申诉通过'
-                  : selectedRecord.status === 5
-                  ? '申诉未通过'
-                  : selectedRecord.status === 6
-                  ? '已核销'
-                  : '其他'}
-              </Tag>
+              <StatusTag status={selectedRecord.status} />
             </Descriptions.Item>
             <Descriptions.Item label="违规说明" span={3}>
               {selectedRecord.violation_content}

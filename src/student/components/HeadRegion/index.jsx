@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useModelActions, useModelState } from 'react-imvc/hook';
 import { Avatar, Button, Badge, Drawer, Input, Spin, Empty, Card, Tag, Divider } from 'antd';
 import { UserOutlined, BellOutlined, LinkOutlined } from '@ant-design/icons';
+import ViolationTagList from '../TagComponents/ViolationTagList';
 import formatUnix, { formatUnixToDate } from '../../../share/formatUnix';
 import { debounce } from 'lodash';
 
@@ -78,7 +79,7 @@ export default function () {
         ) : null}
         {notReadAndStatusNormalViolationInfoList?.map(item => {
           return (
-            <Card className="vio-sys-notice" size="small" hoverable={true}>
+            <Card className="vio-sys-notice" size="small" hoverable={true} key={item.id}>
               <div className="vio-notice-top">
                 <span className="vio-license-container">
                   <span className="vio-license-label vio-sys-notice-label">车牌号</span>
@@ -89,7 +90,6 @@ export default function () {
                   color="primary"
                   variant="link"
                   onClick={() => {
-                    console.log('!!!', item.id);
                     actions.UPDATE_VIOLATIONINFOMODALDATA({
                       isModalOpen: true,
                       violationInfoId: item.id,
@@ -111,19 +111,7 @@ export default function () {
                 <span className="vio-type-container">
                   <span className="vio-sys-notice-label">类型</span>
                   <span className="vio-type-list">
-                    {item.violation_title.map(vio => {
-                      return (
-                        <Tag
-                          color={
-                            vio === '超载' ? 'red' : vio === '超速' ? 'error' : vio === '违停' ? 'volcano' : 'warning'
-                          }
-                          bordered={false}
-                          key={vio}
-                        >
-                          {vio}
-                        </Tag>
-                      );
-                    })}
+                    <ViolationTagList violationTitle={item.violation_title} />
                   </span>
                 </span>
               </div>

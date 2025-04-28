@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Style } from 'react-imvc/component';
 import { useCtrl, useModelState } from 'react-imvc/hook';
 import { Input, Table, Button, Tag, Space, Modal, Descriptions, Image, message } from 'antd';
+import ReportingSourceTag from '../TagComponents/ReportingSourceTag';
+import StatusTag from '../TagComponents/StatusTag';
 import formatUnix from '../../../share/formatUnix';
 
 export default function () {
@@ -76,18 +78,7 @@ export default function () {
       filtered: true,
       defaultFilteredValue: ['0', '1'],
       onFilter: (value, record) => record.reporting_source === value,
-      render: (_, record) => {
-        const reporting_source = record.reporting_source;
-        return (
-          <Tag
-            color={reporting_source === 0 ? 'cyan' : reporting_source === 1 ? 'blue' : 'lime'}
-            bordered={false}
-            key={record.id}
-          >
-            {reporting_source === 0 ? '机器' : reporting_source === 1 ? '人工' : '其他'}
-          </Tag>
-        );
-      },
+      render: (_, record) => <ReportingSourceTag reportingSource={record.reporting_source} />,
     },
     {
       title: '状态',
@@ -111,18 +102,7 @@ export default function () {
       ],
       defaultFilteredValue: ['0', '1'],
       onFilter: (value, record) => record.status === value,
-      render: (_, record) => {
-        const status = record.status;
-        return (
-          <Tag
-            color={status === 0 ? 'warning' : status === 1 ? 'green' : status === 2 ? 'gray' : 'blue'}
-            bordered={false}
-            key={record.id}
-          >
-            {status === 0 ? '待审核' : status === 1 ? '正常' : status === 2 ? '作废' : '其他'}
-          </Tag>
-        );
-      },
+      render: (_, record) => <StatusTag status={record.status} />,
     },
     {
       title: '操作',
@@ -180,47 +160,13 @@ export default function () {
               {formatUnix(selectedRecord.reporting_time)}
             </Descriptions.Item>
             <Descriptions.Item label="信息来源" span={1}>
-              <Tag
-                bordered={false}
-                color={
-                  selectedRecord.reporting_source === 0
-                    ? 'cyan'
-                    : selectedRecord.reporting_source === 1
-                    ? 'blue'
-                    : 'lime'
-                }
-              >
-                {selectedRecord.reporting_source === 0
-                  ? '机器'
-                  : selectedRecord.reporting_source === 1
-                  ? '人工'
-                  : '其他'}
-              </Tag>
+              <ReportingSourceTag reportingSource={selectedRecord.reporting_source} />
             </Descriptions.Item>
             <Descriptions.Item label="违规地点" span={1}>
               {selectedRecord.detection_location}
             </Descriptions.Item>
             <Descriptions.Item label="状态" span={1}>
-              <Tag
-                bordered={false}
-                color={
-                  selectedRecord.status === 0
-                    ? 'warning'
-                    : selectedRecord.status === 1
-                    ? 'green'
-                    : selectedRecord.status === 2
-                    ? 'gray'
-                    : 'blue'
-                }
-              >
-                {selectedRecord.status === 0
-                  ? '待审核'
-                  : selectedRecord.status === 1
-                  ? '正常'
-                  : selectedRecord.status === 2
-                  ? '作废'
-                  : '其他'}
-              </Tag>
+              <StatusTag status={selectedRecord.status} />
             </Descriptions.Item>
             <Descriptions.Item label="图片列表" span={3}>
               {selectedRecord.img_list.map((img, index) => (

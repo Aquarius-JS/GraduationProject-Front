@@ -9,7 +9,6 @@ export default function ReportForm() {
   const [fileList, setFileList] = useState([]);
   // 处理表单提交
   const handleSubmit = async values => {
-    console.log(values);
     const res = await ctrl.unregisteredVehicleInfoReporting({
       ...values,
       reportingSource: 1,

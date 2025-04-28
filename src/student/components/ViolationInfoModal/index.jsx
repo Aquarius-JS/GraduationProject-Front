@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useCtrl, useModelActions, useModelState } from 'react-imvc/hook';
 import { Button, Modal, Image, Descriptions, Tag, Input, Space, message } from 'antd';
+import StatusTag from '../TagComponents/StatusTag';
+import ViolationTagList from '../TagComponents/ViolationTagList';
+import ReportingSourceTag from '../TagComponents/ReportingSourceTag';
 import formatUnix from '../../../share/formatUnix';
 
 export default function () {
@@ -58,69 +61,19 @@ export default function () {
             {selectedVioInfo.license_number}
           </Descriptions.Item>
           <Descriptions.Item label="违规类型" span={1}>
-            {selectedVioInfo.violation_title?.map(item => (
-              <Tag
-                bordered={false}
-                color={item === '超载' ? 'red' : item === '超速' ? 'error' : item === '违停' ? 'volcano' : 'warning'}
-                key={item}
-              >
-                {item}
-              </Tag>
-            ))}
+            <ViolationTagList violationTitle={selectedVioInfo.violation_title ?? []} />
           </Descriptions.Item>
           <Descriptions.Item label="违规时间" span={1}>
             {formatUnix(selectedVioInfo.reporting_time)}
           </Descriptions.Item>
           <Descriptions.Item label="信息来源" span={1}>
-            <Tag
-              bordered={false}
-              color={
-                selectedVioInfo.reporting_source === 0
-                  ? 'cyan'
-                  : selectedVioInfo.reporting_source === 1
-                  ? 'blue'
-                  : 'lime'
-              }
-            >
-              {selectedVioInfo.reporting_source === 0
-                ? '机器'
-                : selectedVioInfo.reporting_source === 1
-                ? '人工'
-                : '其他'}
-            </Tag>
+            <ReportingSourceTag reportingSource={selectedVioInfo.reporting_source} />
           </Descriptions.Item>
           <Descriptions.Item label="违规地点" span={1}>
             {selectedVioInfo.detection_location}
           </Descriptions.Item>
           <Descriptions.Item label="状态" span={1}>
-            <Tag
-              bordered={false}
-              color={
-                selectedVioInfo.status === 1
-                  ? 'warning'
-                  : selectedVioInfo.status === 3
-                  ? 'blue'
-                  : selectedVioInfo.status === 4
-                  ? 'green'
-                  : selectedVioInfo.status === 5
-                  ? 'red'
-                  : selectedVioInfo.status === 6
-                  ? 'green'
-                  : 'gray'
-              }
-            >
-              {selectedVioInfo.status === 1
-                ? '待核销'
-                : selectedVioInfo.status === 3
-                ? '申诉中'
-                : selectedVioInfo.status === 4
-                ? '申诉通过'
-                : selectedVioInfo.status === 5
-                ? '申诉未通过'
-                : selectedVioInfo.status === 6
-                ? '已核销'
-                : '其他'}
-            </Tag>
+            <StatusTag status={selectedVioInfo.status} />
           </Descriptions.Item>
           <Descriptions.Item label="违规说明" span={3}>
             {selectedVioInfo.violation_content}

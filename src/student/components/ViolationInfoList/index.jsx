@@ -1,6 +1,8 @@
 import React from 'react';
 import { useModelActions, useModelState } from 'react-imvc/hook';
 import { Button, Table, Tag, Space } from 'antd';
+import StatusTag from '../TagComponents/StatusTag';
+import ViolationTagList from '../TagComponents/ViolationTagList';
 import formatUnix from '../../../share/formatUnix';
 
 export default function () {
@@ -8,7 +10,6 @@ export default function () {
   const actions = useModelActions();
   const { violationInfoList } = state;
   const computedViolationInfoList = violationInfoList?.filter(item => item.status !== 0) ?? [];
-  console.log(state);
 
   const columns = [
     {
@@ -23,19 +24,7 @@ export default function () {
       key: 'violation_title',
       width: 260,
       align: 'center',
-      render: (_, record) => {
-        return record.violation_title.map(item => {
-          return (
-            <Tag
-              color={item === '超载' ? 'red' : item === '超速' ? 'error' : item === '违停' ? 'volcano' : 'warning'}
-              bordered={false}
-              key={item}
-            >
-              {item}
-            </Tag>
-          );
-        });
-      },
+      render: (_, record) => <ViolationTagList violationTitle={record.violation_title} />,
     },
     {
       title: '违规地点',
@@ -56,40 +45,7 @@ export default function () {
       key: 'status',
       width: 100,
       align: 'center',
-      render: (_, record) => {
-        const status = record.status;
-        return (
-          <Tag
-            color={
-              status === 1
-                ? 'warning'
-                : status === 3
-                ? 'blue'
-                : status === 4
-                ? 'green'
-                : status === 5
-                ? 'red'
-                : status === 6
-                ? 'green'
-                : 'gray'
-            }
-            bordered={false}
-            key={record.id}
-          >
-            {status === 1
-              ? '待核销'
-              : status === 3
-              ? '申诉中'
-              : status === 4
-              ? '申诉通过'
-              : status === 5
-              ? '申诉未通过'
-              : status === 6
-              ? '已核销'
-              : '其他'}
-          </Tag>
-        );
-      },
+      render: (_, record) => <StatusTag status={record.status} />,
     },
     {
       title: '操作',

@@ -21,64 +21,6 @@ export default ({ vehicle }) => {
 
   return (
     <>
-      {/* <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: 20,
-          border: '1px solid #f0f0f0',
-          padding: 10,
-          borderRadius: 5,
-          width: 800,
-        }}
-      >
-        <div style={{}}>
-          <h3>
-            <span
-              style={{
-                color: vehicle.vehicle_type === 1 ? '#4CAF50' : '#2196F3', // 绿色字体或蓝色字体
-                fontWeight: 'bold',
-              }}
-            >
-              {vehicle.vehicle_type === 1 ? '电动车' : '摩托车'} {vehicle.license_number}
-            </span>
-          </h3>
-          <p>登记日期: {formatUnix(vehicle.filing_date)}</p>
-          <p>车辆状态: {statusMap[vehicle.vehicle_status]}</p>
-        </div>
-        <div style={{ display: 'flex', gap: 10 }}>
-          <div>
-            <img src={vehicle.vehicle_img} alt="车辆外观照片" style={{ height: 100, objectFit: 'cover' }} />
-          </div>
-        </div>
-        <div
-          style={{
-            height: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 10,
-            justifyContent: 'space-between',
-            alignItems: 'flex-end',
-          }}
-        >
-          <Button
-            onClick={async () => {
-              const res = await ctrl.leavingRegister({ registerId: vehicle.id });
-              if (res.isOk) {
-                message.success(res.message);
-              } else {
-                message.warning(res.message);
-              }
-              ctrl.getVehicleInfoByStuToken();
-            }}
-          >
-            离校
-          </Button>
-          <Button icon={!isExpanded ? <DownOutlined /> : <UpOutlined />} onClick={() => setIsExpanded(!isExpanded)} />
-        </div>
-      </div> */}
       <Collapse
         bordered={false}
         activeKey={isExpanded ? ['1'] : []}
@@ -150,11 +92,10 @@ export default ({ vehicle }) => {
                 </div>
               </div>
             ),
-            children: <ViolationInfoList />,
+            children: <ViolationInfoList licenseNumber={vehicle.license_number} />,
           },
         ]}
       />
-      {/* <Collapse items={[{ key: '1', label: 'This is default size panel header', children: <p>{1}</p> }]} /> */}
     </>
   );
 };
