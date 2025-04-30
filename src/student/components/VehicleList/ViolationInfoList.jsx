@@ -1,6 +1,6 @@
 import React from 'react';
 import { useModelActions, useModelState } from 'react-imvc/hook';
-import { List } from 'antd';
+import { Table } from 'antd';
 import StatusTag from '../TagComponents/StatusTag';
 import ViolationTagList from '../TagComponents/ViolationTagList';
 import { formatUnixToYMD } from '../../../share/formatUnix';
@@ -12,30 +12,49 @@ export default ({ licenseNumber }) => {
   const computedViolationInfoList =
     violationInfoList?.filter(item => item.status !== 0 && item.license_number === licenseNumber) ?? [];
 
+  const columns = [
+    {
+      key: 'detection_location',
+      render: (_, record) => {
+        return record.detection_location;
+      },
+    },
+    {
+      key: 'reporting_time',
+      render: (_, record) => {
+        return formatUnixToYMD(record.reporting_time);
+      },
+    },
+    {
+      key: 'status',
+      render: (_, record) => <StatusTag status={record.status} />,
+    },
+    {
+      key: 'violation_title',
+      align: 'center',
+      render: (_, record) => <ViolationTagList violationTitle={record.violation_title ?? []} />,
+    },
+  ];
+
   return (
     <>
-      <div style={{ padding: '0 20px' }}>
-        <List
+      <div style={{ padding: '0 10px' }}>
+        <Table
+          rowKey="id"
+          columns={columns}
           dataSource={computedViolationInfoList}
-          renderItem={item => (
-            <List.Item
-              onClick={() => {
+          showHeader={false}
+          pagination={false}
+          onRow={record => {
+            return {
+              onClick: () => {
                 actions.UPDATE_VIOLATIONINFOMODALDATA({
                   isModalOpen: true,
-                  violationInfoId: item.id,
+                  violationInfoId: record.id,
                 });
-              }}
-            >
-              <div style={{ display: 'flex', gap: 10 }}>
-                <span>{item.detection_location}</span>
-                <span>{formatUnixToYMD(item.reporting_time)}</span>
-                <StatusTag status={item.status} />
-              </div>
-              <div>
-                <ViolationTagList violationTitle={item.violation_title ?? []} />
-              </div>
-            </List.Item>
-          )}
+              },
+            };
+          }}
         />
       </div>
     </>
