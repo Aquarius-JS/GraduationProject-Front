@@ -117,4 +117,12 @@ export default class Admin extends Controller {
     });
     return res;
   };
+
+  violationInfoDealtById = async data => {
+    const res = await this.fetch('/violationInfoDealtById', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+    return res;
+  };
 }

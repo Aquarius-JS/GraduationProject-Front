@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Style } from 'react-imvc/component';
 import { useCtrl, useModelState } from 'react-imvc/hook';
-import { Input, Table, Button, Tag, Space, Modal, Descriptions, Image, message } from 'antd';
+import { Input, Table, Button, Popconfirm, Space, Modal, Descriptions, Image, message } from 'antd';
 import StatusTag from '../TagComponents/StatusTag';
 import ReportingSourceTag from '../TagComponents/ReportingSourceTag';
 import ViolationTagList from '../TagComponents/ViolationTagList';
@@ -55,6 +55,18 @@ export default function () {
       message.warning(res.message);
     }
     setAppealResponse('');
+  };
+
+  const dealtHandle = async id => {
+    const res = await ctrl.violationInfoDealtById({ id });
+    if (res.isOk) {
+      message.success(res.message);
+      const updatedViolationInfo = violationInfo.map(item => (item.id === id ? { ...item, status: 6 } : item));
+      setViolationInfo(updatedViolationInfo);
+      setSelectedRecord({ ...selectedRecord, status: 6 });
+    } else {
+      message.warning(res.message);
+    }
   };
 
   const columns = [
@@ -247,6 +259,24 @@ export default function () {
                     申诉拒绝
                   </Button>
                 </Space>
+              </div>
+            </div>
+          )}
+          {selectedRecord && (selectedRecord.status === 1 || selectedRecord.status === 5) && (
+            <div style={{ marginTop: 20 }}>
+              <div style={{ marginBottom: 15 }}>
+                <label style={{ display: 'block', fontWeight: 600, marginBottom: 8 }}>核销</label>
+                <Popconfirm
+                  title="确认核销"
+                  description="请确认信息是否有误"
+                  okText="确认"
+                  cancelText="取消"
+                  onConfirm={() => {
+                    return dealtHandle(selectedRecord.id);
+                  }}
+                >
+                  <Button type="primary">核销</Button>
+                </Popconfirm>
               </div>
             </div>
           )}
