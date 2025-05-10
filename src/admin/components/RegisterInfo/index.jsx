@@ -1,30 +1,45 @@
 import React, { useState } from 'react';
-import { useCtrl, useModelState } from 'react-imvc/hook';
-import { Table, Image, Button, Space, message, Popover, Input } from 'antd';
+import { useCtrl, useModelActions, useModelState } from 'react-imvc/hook';
+import { Table, Image, Button, Space, message, Input, Modal, Descriptions } from 'antd';
+import VehicleStatusTag from '../TagComponents/VehicleStatusTag';
 import formatUnix from '../../../share/formatUnix';
 
 export default function () {
   const ctrl = useCtrl();
   const state = useModelState();
-  const [rejectReason, setRejectReason] = useState('');
+  const actions = useModelActions();
+  const [opinion, setOpinion] = useState('');
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedRecord, setSelectedRecord] = useState({});
 
   const handleApprove = async id => {
-    const res = await ctrl.approveRegister(id);
+    const res = await ctrl.approveRegister(id, opinion);
     if (res.isOk) {
       message.success(res.message);
+      const updatedRegisterInfo = state.registerInfo.map(item =>
+        item.id === id ? { ...item, vehicle_status: 2, remark: opinion } : item
+      );
+      actions.UPDATE_REGISTERINFO(updatedRegisterInfo);
+      setIsModalVisible(false);
+      setSelectedRecord({});
     } else {
       message.warning(res.message);
     }
   };
 
   const handleReject = async id => {
-    const res = await ctrl.rejectRegister(id, rejectReason);
+    const res = await ctrl.rejectRegister(id, opinion);
     if (res.isOk) {
       message.success(res.message);
+      const updatedRegisterInfo = state.registerInfo.map(item =>
+        item.id === id ? { ...item, vehicle_status: 5, remark: opinion } : item
+      );
+      actions.UPDATE_REGISTERINFO(updatedRegisterInfo);
+      setIsModalVisible(false);
+      setSelectedRecord({});
     } else {
       message.warning(res.message);
     }
-    setCurrentRejectId(null);
   };
 
   const columns = [
@@ -55,28 +70,11 @@ export default function () {
       width: 100,
     },
     {
-      title: '学生证照片',
-      dataIndex: 'stu_card_img',
-      key: 'stu_card_img',
-      align: 'center',
-      render: img => <Image src={img} alt="学生证照片" height={100} />,
-      width: 150,
-    },
-    {
-      title: '车辆外观照片',
-      dataIndex: 'vehicle_img',
-      key: 'vehicle_img',
-      align: 'center',
-      render: img => <Image src={img} alt="车辆外观照片" height={100} />,
-      width: 150,
-    },
-    {
-      title: '车牌号照片',
-      dataIndex: 'license_img',
-      key: 'license_img',
-      align: 'center',
-      render: img => <Image src={img} alt="车牌号照片" height={100} />,
-      width: 150,
+      title: '状态',
+      dataIndex: 'vehicle_status',
+      key: 'vehicle_status',
+      render: status => <VehicleStatusTag status={status} />,
+      width: 100,
     },
     {
       title: '操作',
@@ -85,38 +83,31 @@ export default function () {
       render: (_, record) => (
         <>
           <Space direction="vertical">
-            <Button type="primary" size="small" onClick={() => handleApprove(record.id)}>
-              审核通过
-            </Button>
-            <Popover
-              content={
-                <div style={{ width: 200 }}>
-                  <Input.TextArea
-                    rows={3}
-                    value={rejectReason}
-                    onChange={e => setRejectReason(e.target.value)}
-                    placeholder="请输入拒绝原因"
-                  />
-                  <div style={{ marginTop: 10, textAlign: 'right' }}>
-                    <Button
-                      type="primary"
-                      size="small"
-                      onClick={() => {
-                        handleReject(record.id);
-                      }}
-                    >
-                      确定
-                    </Button>
-                  </div>
-                </div>
-              }
-              title="审核未通过"
-              trigger="click"
-            >
-              <Button danger size="small">
-                审核未通过
+            {record.vehicle_status === 1 && (
+              <Button
+                size="small"
+                type="primary"
+                onClick={() => {
+                  setIsModalVisible(true);
+                  setSelectedRecord(record);
+                }}
+              >
+                审批
               </Button>
-            </Popover>
+            )}
+            {record.vehicle_status !== 1 && (
+              <Button
+                size="small"
+                color="magenta"
+                variant="solid"
+                onClick={() => {
+                  setIsModalVisible(true);
+                  setSelectedRecord(record);
+                }}
+              >
+                详情
+              </Button>
+            )}
           </Space>
         </>
       ),
@@ -135,6 +126,74 @@ export default function () {
         size="small"
         style={{ width: 1400 }}
       />
+      <Modal
+        title="车辆登记信息详情"
+        open={isModalVisible}
+        onCancel={() => setIsModalVisible(false)}
+        footer={[
+          <Button key="close" onClick={() => setIsModalVisible(false)}>
+            关闭
+          </Button>,
+        ]}
+        width={1300}
+      >
+        <Descriptions bordered column={3}>
+          <Descriptions.Item label="学号" span={1}>
+            {selectedRecord.stu_number}
+          </Descriptions.Item>
+
+          <Descriptions.Item label="车辆类型" span={1}>
+            {selectedRecord.vehicle_type}
+          </Descriptions.Item>
+          <Descriptions.Item label="车牌号" span={1}>
+            {selectedRecord.license_number}
+          </Descriptions.Item>
+          <Descriptions.Item label="登记提交时间" span={1}>
+            {formatUnix(selectedRecord.filing_date)}
+          </Descriptions.Item>
+          <Descriptions.Item label="状态" span={2}>
+            <VehicleStatusTag status={selectedRecord.vehicle_status} />
+          </Descriptions.Item>
+          <Descriptions.Item label="车牌号照片" span={1}>
+            <Image src={selectedRecord.license_img} style={{ marginRight: 10 }} width={100} />
+          </Descriptions.Item>
+          <Descriptions.Item label="车辆外观照片" span={1}>
+            <Image src={selectedRecord.vehicle_img} style={{ marginRight: 10 }} width={100} />
+          </Descriptions.Item>
+          <Descriptions.Item label="学生证照片" span={1}>
+            <Image src={selectedRecord.stu_card_img} style={{ marginRight: 10 }} width={100} />
+          </Descriptions.Item>
+          {selectedRecord.remark !== '' && (
+            <Descriptions.Item label="备注" span={3}>
+              {selectedRecord.remark}
+            </Descriptions.Item>
+          )}
+        </Descriptions>
+        {selectedRecord.vehicle_status === 1 && (
+          <div style={{ marginTop: 20 }}>
+            <div style={{ marginBottom: 15 }}>
+              <label style={{ display: 'block', fontWeight: 600, marginBottom: 8 }}>车辆登记审批</label>
+              <Input.TextArea
+                value={opinion}
+                onChange={e => setOpinion(e.target.value)}
+                placeholder="请输入审批意见"
+                autoSize={{ minRows: 3, maxRows: 6 }}
+                style={{ width: '100%' }}
+              />
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <Space size="middle">
+                <Button color="cyan" variant="solid" onClick={() => handleApprove(selectedRecord.id)}>
+                  审批通过
+                </Button>
+                <Button type="primary" danger onClick={() => handleReject(selectedRecord.id)}>
+                  申批拒绝
+                </Button>
+              </Space>
+            </div>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }
