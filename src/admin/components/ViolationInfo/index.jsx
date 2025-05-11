@@ -133,7 +133,7 @@ export default function () {
       render: (_, record) => {
         return (
           <Space>
-            {record.status === 0 ? (
+            {record.status === 0 || record.status === 3 ? (
               <Button size="small" type="primary" onClick={() => handleShowDetails(record)}>
                 审批
               </Button>
