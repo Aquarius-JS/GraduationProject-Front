@@ -111,10 +111,6 @@ export default function ReportForm() {
             allowClear
             mode="tags" // 使用 tags 模式允许输入
             tokenSeparators={[',']} // 定义分隔符（这里使用逗号，但用户也可以直接输入）
-            onChange={value => {
-              // 处理选择或输入的值
-              console.log('选择或输入的值:', value);
-            }}
           >
             <Select.Option value="超速">超速</Select.Option>
             <Select.Option value="超载">超载</Select.Option>

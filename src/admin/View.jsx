@@ -7,8 +7,9 @@ import RegisterInfo from './components/RegisterInfo/index';
 import Announcement from './components/Announcement';
 import ViolationInfo from './components/ViolationInfo';
 import UnregisteredVehicleInfo from './components/UnregisteredVehicleInfo';
+import MonitoringEquipment from './components/MonitoringEquipment';
 
-const { Header, Sider, Content } = Layout;
+const { Header, Content } = Layout;
 
 export default function () {
   const state = useModelState();
@@ -28,6 +29,7 @@ export default function () {
             {tap === 'announcement' && <Announcement />}
             {tap === 'violation_info' && <ViolationInfo />}
             {tap === 'unregistered-reporting' && <UnregisteredVehicleInfo />}
+            {tap === 'monitoring-equipment' && <MonitoringEquipment />}
           </Content>
         </Layout>
       </Layout>

@@ -1,0 +1,43 @@
+.me-container {
+  width: 100%;
+  padding: 15px 100px;
+}
+
+.me-form {
+  display: flex;
+  justify-content: space-between;
+  width: 600px;
+  flex-wrap: wrap;
+}
+
+.me-form-item {
+  width: 200px !important;
+}
+
+.me-url-container {
+  display: flex;
+  gap: 10px;
+}
+
+.me-rules-container {
+  padding: 5px;
+}
+
+.me-rules-container div {
+  display: flex;
+  gap: 15px;
+}
+
+.success-button {
+  background-color: #52c41a !important; /* Ant Design 的成功绿色 */
+  border-color: #52c41a !important;
+}
+
+.me-url-container {
+  display: flex;
+  gap: 8px;
+}
+
+.me-form-item {
+  flex: 1;
+}

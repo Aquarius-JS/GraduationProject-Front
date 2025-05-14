@@ -10,6 +10,7 @@ export default class Admin extends Controller {
     admin: './admin/styles/admin.css',
     editor: './admin/styles/editor.css',
     announcement: './admin/styles/announcement.css',
+    me: './admin/styles/monitoringEquipment.css',
   };
 
   getInitialState = () => {
@@ -123,6 +124,30 @@ export default class Admin extends Controller {
 
   violationInfoDealtById = async data => {
     const res = await this.fetch('/violationInfoDealtById', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+    return res;
+  };
+
+  getMonitoringEquipment = async () => {
+    const res = await this.fetch('/getMonitoringEquipment', {
+      method: 'POST',
+    });
+    this.store.actions.UPDATE_MONITORINGEQUIPMENT(res ?? []);
+    return res;
+  };
+
+  addMonitoringEquipment = async data => {
+    const res = await this.fetch('/addMonitoringEquipment', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+    return res;
+  };
+
+  updateMonitoringEquipmentRules = async data => {
+    const res = await this.fetch('/updateMonitoringEquipmentRules', {
       method: 'POST',
       body: JSON.stringify(data),
     });
