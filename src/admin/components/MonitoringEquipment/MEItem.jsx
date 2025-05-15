@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useCtrl } from 'react-imvc/hook';
-import { Card, Row, Col, Tag, Badge, Tooltip, Button, Drawer, Form, Switch, Space } from 'antd';
+import { Card, Row, Col, Tag, Badge, Button, Drawer, Form, Switch, Space, Input } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 
 export default function MEItem({ meData }) {
@@ -18,6 +18,7 @@ export default function MEItem({ meData }) {
       illegalRunning = true, // 违规检测启用
       unRegisteredCheck = true, // 未登记车辆核查
       unRegisteredRunning = true, // 未登记检测启用
+      speedLimit = 30, // 车速限制
     } = {},
   } = meData;
 
@@ -74,6 +75,7 @@ export default function MEItem({ meData }) {
       illegalRunning,
       unRegisteredCheck,
       unRegisteredRunning,
+      speedLimit,
     });
     setDrawerVisible(true);
   };
@@ -165,16 +167,30 @@ export default function MEItem({ meData }) {
                   <Form.Item label="违规检测启用" name="illegalRunning" valuePropName="checked">
                     <Switch />
                   </Form.Item>
-
                   <Form.Item
                     noStyle
                     shouldUpdate={(prevValues, currValues) => prevValues.illegalRunning !== currValues.illegalRunning}
                   >
                     {({ getFieldValue }) => {
                       return getFieldValue('illegalRunning') ? (
-                        <Form.Item label="违规核查启用" name="illegalCheck" valuePropName="checked">
-                          <Switch />
-                        </Form.Item>
+                        <>
+                          <Form.Item
+                            label="车速限制"
+                            name="speedLimit"
+                            rules={[{ required: true, message: '请输入车速限制' }]}
+                          >
+                            <Input
+                              type="number"
+                              placeholder="请输入车速限制（单位：km/h）"
+                              suffix="km/h"
+                              size="small"
+                              style={{ width: '200px', marginLeft: '20px' }}
+                            />
+                          </Form.Item>
+                          <Form.Item label="违规核查启用" name="illegalCheck" valuePropName="checked">
+                            <Switch />
+                          </Form.Item>
+                        </>
                       ) : null;
                     }}
                   </Form.Item>

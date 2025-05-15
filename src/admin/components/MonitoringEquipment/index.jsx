@@ -19,6 +19,7 @@ export default function MonitoringEquipment() {
   const [isRunning, setIsRunning] = useState(true);
   const [unRegisteredRunning, setUnRegisteredRunning] = useState(true);
   const [illegalRunning, setIllegalRunning] = useState(true);
+  const [speedLimit, setSpeedLimit] = useState(30);
   const [unRegisteredCheck, setUnRegisteredCheck] = useState(true);
   const [illegalCheck, setIllegalCheck] = useState(true);
 
@@ -32,7 +33,7 @@ export default function MonitoringEquipment() {
       ip: meIp,
       sn: meSn,
       location: meLocation,
-      rules: { isRunning, unRegisteredRunning, illegalRunning, unRegisteredCheck, illegalCheck },
+      rules: { isRunning, unRegisteredRunning, illegalRunning, unRegisteredCheck, illegalCheck, speedLimit },
     });
     if (res.code === 200) {
       message.success(res.message);
@@ -154,6 +155,19 @@ export default function MonitoringEquipment() {
                     <div>
                       <span>违规车辆检测:</span>
                       <Switch checked={illegalRunning} onChange={setIllegalRunning} defaultChecked={true} />
+                      {illegalRunning && (
+                        <Input
+                          value={speedLimit}
+                          onChange={e => {
+                            setSpeedLimit(e.target.value);
+                          }}
+                          type="number"
+                          placeholder="车速限制"
+                          suffix="km/h"
+                          size="small"
+                          style={{ width: '200px', marginLeft: '20px' }}
+                        />
+                      )}
                     </div>
                     {illegalRunning && (
                       <div>
