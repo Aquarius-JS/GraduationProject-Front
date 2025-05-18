@@ -37,6 +37,7 @@ export default function MonitoringEquipment() {
     });
     if (res.code === 200) {
       message.success(res.message);
+      ctrl.getMonitoringEquipment();
     } else {
       message.warning(res.message);
     }

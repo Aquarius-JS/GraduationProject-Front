@@ -30,6 +30,11 @@ const items = [
     key: 'monitoring-equipment',
     icon: <SettingOutlined />,
   },
+  {
+    label: '数据统计分析',
+    key: 'data-statistical-analysis',
+    icon: <SettingOutlined />,
+  },
 ];
 
 export default function () {

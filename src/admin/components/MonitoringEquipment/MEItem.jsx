@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useCtrl } from 'react-imvc/hook';
-import { Card, Row, Col, Tag, Badge, Button, Drawer, Form, Switch, Space, Input } from 'antd';
-import { SettingOutlined } from '@ant-design/icons';
+import { Card, Row, Col, Tag, Badge, Button, Drawer, Form, Switch, Space, Input, message, Modal } from 'antd';
+import { SettingOutlined, DeleteOutlined, VideoCameraOutlined } from '@ant-design/icons';
 
 export default function MEItem({ meData }) {
   const ctrl = useCtrl();
@@ -52,8 +52,8 @@ export default function MEItem({ meData }) {
     ];
     return tags
       .filter(tag => {
-        if (tag.key === 'isRunning') return true;
-        if (tag.key !== 'isRunning') return isRunning;
+        if (tag.key === 'isRunning' || tag.key === 'isMonitoring') return true;
+        if (tag.key !== 'isRunning' && tag.key !== 'isMonitoring') return isRunning;
       }) // 只显示启用的标签
       .filter(tag => {
         if (tag.key === 'illegalCheck') return illegalRunning;
@@ -93,12 +93,61 @@ export default function MEItem({ meData }) {
     onCloseDrawer();
   };
 
+  // 删除设备
+  const handleDeleteEquipment = async () => {
+    try {
+      const confirm = await Modal.confirm({
+        title: '确认删除',
+        content: `确定要删除设备 "${name}" 吗？`,
+        okText: '删除',
+        cancelText: '取消',
+        okType: 'danger',
+        onOk: async () => {
+          // await ctrl.deleteMonitoringEquipment({ id });
+          message.success('设备已删除');
+          await ctrl.getMonitoringEquipment();
+        },
+      });
+    } catch (error) {
+      console.error('删除设备失败:', error);
+    }
+  };
+
+  // 切换实时监控状态
+  const toggleMonitoring = async () => {
+    try {
+    } catch (error) {
+      console.error('切换监控状态失败:', error);
+    }
+  };
+
   return (
     <div style={{ margin: '10px' }}>
       <Card
         size="small"
         hoverable={true}
-        title={name}
+        title={
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span>{name}</span>
+            <Space>
+              <Button type="primary" icon={<SettingOutlined />} size="small" onClick={showDrawer}>
+                配置规则
+              </Button>
+              <Button type="primary" icon={<DeleteOutlined />} danger size="small" onClick={handleDeleteEquipment}>
+                删除
+              </Button>
+              <Button
+                type="primary"
+                icon={<VideoCameraOutlined />}
+                size="small"
+                style={{ color: '#52c41a' }}
+                onClick={toggleMonitoring}
+              >
+                实时监控
+              </Button>
+            </Space>
+          </div>
+        }
         extra={id}
         style={{ width: '100%' }}
         headStyle={{ backgroundColor: '#f8f9fa' }}
@@ -123,18 +172,7 @@ export default function MEItem({ meData }) {
 
         <Row gutter={[16, 16]} style={{ marginTop: '16px' }}>
           <Col span={24}>
-            <h3 style={{ margin: '8px 0' }}>
-              规则设置
-              <Button
-                type="primary"
-                icon={<SettingOutlined />}
-                style={{ marginLeft: 16 }}
-                onClick={showDrawer}
-                size="small"
-              >
-                配置规则
-              </Button>
-            </h3>
+            <h3 style={{ margin: '8px 0' }}>规则设置</h3>
             <Row gutter={[8, 8]}>{renderStatusTags()}</Row>
           </Col>
         </Row>

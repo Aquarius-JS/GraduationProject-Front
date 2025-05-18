@@ -8,6 +8,7 @@ import Announcement from './components/Announcement';
 import ViolationInfo from './components/ViolationInfo';
 import UnregisteredVehicleInfo from './components/UnregisteredVehicleInfo';
 import MonitoringEquipment from './components/MonitoringEquipment';
+import DataStatisticalAnalysis from './components/DataStatisticalAnalysis';
 
 const { Header, Content } = Layout;
 
@@ -30,6 +31,7 @@ export default function () {
             {tap === 'violation_info' && <ViolationInfo />}
             {tap === 'unregistered-reporting' && <UnregisteredVehicleInfo />}
             {tap === 'monitoring-equipment' && <MonitoringEquipment />}
+            {tap === 'data-statistical-analysis' && <DataStatisticalAnalysis />}
           </Content>
         </Layout>
       </Layout>
