@@ -23,4 +23,8 @@ export default [
     path: '/violationInfoReporting',
     controller: () => import('./violationInfoReporting/Controller'),
   },
+  {
+    path: '/monitoring/screen',
+    controller: () => import('./monitoring/Controller'),
+  },
 ];
